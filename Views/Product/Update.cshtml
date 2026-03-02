@@ -1,0 +1,99 @@
+@model WebsiteBanHang.Models.Product
+
+@{
+    ViewData["Title"] = "Cập nhật sản phẩm";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-header bg-warning py-3">
+                    <h4 class="mb-0 fw-bold text-dark">✏️ Chỉnh Sửa Sản Phẩm: @Model.Name</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Update" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="ImageUrl" />
+
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="mb-3">
+                                    <label asp-for="Name" class="form-label fw-bold">Tên sản phẩm</label>
+                                    <input asp-for="Name" class="form-control shadow-sm" />
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Price" class="form-label fw-bold">Giá bán (VNĐ)</label>
+                                        <input asp-for="Price" type="number" class="form-control shadow-sm" />
+                                        <span asp-validation-for="Price" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="CategoryId" class="form-label fw-bold">Danh mục</label>
+                                        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select shadow-sm"></select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Size" class="form-label fw-bold">Kích cỡ</label>
+                                        <input asp-for="Size" class="form-control shadow-sm" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Color" class="form-label fw-bold">Màu sắc</label>
+                                        <input asp-for="Color" class="form-control shadow-sm" />
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Description" class="form-label fw-bold">Mô tả</label>
+                                    <textarea asp-for="Description" class="form-control shadow-sm" rows="4"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 border-start ps-4">
+                                <label class="form-label fw-bold text-primary">Hình ảnh sản phẩm</label>
+                                
+                                <div class="mb-3 text-center">
+                                    <p class="small text-muted mb-1">Ảnh hiện tại:</p>
+                                    <img src="~/images/@Model.ImageUrl" id="currentImage" class="img-thumbnail shadow-sm" style="max-height: 200px; object-fit: cover;" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="small fw-bold">Thay đổi ảnh mới:</label>
+                                    <input type="file" name="ImageFile" class="form-control form-control-sm" id="imageInput" accept="image/*" />
+                                </div>
+
+                                <div id="previewContainer" class="text-center d-none">
+                                    <p class="small text-success mb-1">Ảnh mới chọn:</p>
+                                    <img id="imagePreview" src="#" class="img-thumbnail border-success" style="max-height: 150px;" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-top mt-4 pt-3">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">🔙 Hủy bỏ</a>
+                            <button type="submit" class="btn btn-warning btn-lg px-5 fw-bold shadow">Cập nhật ngay</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Xử lý xem trước ảnh khi người dùng chọn file mới
+        document.getElementById('imageInput').onchange = function (evt) {
+            const [file] = this.files;
+            if (file) {
+                document.getElementById('imagePreview').src = URL.createObjectURL(file);
+                document.getElementById('previewContainer').classList.remove('d-none');
+                document.getElementById('currentImage').style.opacity = "0.5";
+            }
+        };
+    </script>
+}

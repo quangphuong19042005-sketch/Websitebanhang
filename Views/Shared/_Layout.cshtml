@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Fashion Store</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebsiteBanHang.styles.css" asp-append-version="true" />
+
+    <style>
+        @@media (min-width: 992px) {
+            .dropdown:hover .dropdown-menu {
+                display: block;
+                margin-top: 0;
+                animation: fadeIn 0.3s;
+            }
+        }
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header class="sticky-top shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container">
+                <a class="navbar-brand fw-bold fs-3 text-uppercase" asp-controller="Home" asp-action="Index">
+                    <span class="text-warning">Fashion</span> Store
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold px-3 text-dark" asp-controller="Home" asp-action="Index">TRANG CHỦ</a>
+                        </li>
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link fw-semibold px-3 text-dark dropdown-toggle" 
+                               id="navbarDropdown" role="button">
+                                SẢN PHẨM
+                            </a>
+                            <ul class="dropdown-menu border-0 shadow">
+                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">📦 Quản lý kho hàng</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-controller="Home" asp-action="Index"asp-fragment="featured-products">🛍️ Xem Danh sách</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold px-3 text-dark" asp-controller="Home" asp-action="Privacy">CHÍNH SÁCH</a>
+                        </li>
+                    </ul>
+                    
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="text-dark me-3"><i class="fa-solid fa-magnifying-glass fs-5"></i></a>
+                        <a href="#" class="text-dark position-relative me-3">
+                            <i class="fa-solid fa-cart-shopping fs-5"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                        </a>
+                        <a href="#" class="btn btn-outline-dark btn-sm fw-bold">ĐĂNG NHẬP</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container my-4">
+        <main role="main" class="pb-5">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="bg-dark text-white pt-5 pb-4 mt-auto">
+        <div class="container text-md-start">
+            <div class="row">
+                <div class="col-md-4 col-lg-4 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold text-warning border-bottom border-warning pb-2 d-inline-block">Fashion Store</h5>
+                    <p class="small text-secondary">Nơi hội tụ những xu hướng mới nhất. Cam kết chất lượng cao.</p>
+                </div>
+                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 fw-bold">Thông tin liên hệ</h6>
+                    <p><i class="fas fa-home me-2"></i> HUTECH KHU E1.0809</p>
+                    <p><i class="fas fa-envelope me-2"></i> support@fashion.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +84 909 123 456</p>
+                </div>
+            </div>
+            <hr class="mt-5 mb-4 border-secondary">
+            <div class="text-center">
+                <p class="small text-secondary mb-0">Copyright © 2026 All rights reserved by: <strong class="text-warning">Fashion Store Team</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

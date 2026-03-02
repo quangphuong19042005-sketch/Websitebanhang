@@ -1,0 +1,108 @@
+@model WebsiteBanHang.Models.Product
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm mới";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-header bg-primary text-white py-3 text-center">
+                    <h4 class="mb-0 fw-bold">✨ THÊM SẢN PHẨM MỚI</h4>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form asp-action="Add" method="post" enctype="multipart/form-data">
+                        
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Name" class="form-label fw-bold">Tên sản phẩm</label>
+                                <input asp-for="Name" class="form-control shadow-sm" placeholder="Ví dụ: Áo thun Polo, Quần Tây Âu..." />
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Price" class="form-label fw-bold">Giá bán (VNĐ)</label>
+                                <input asp-for="Price" type="number" class="form-control shadow-sm" placeholder="0" />
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CategoryId" class="form-label fw-bold">Danh mục</label>
+                                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select shadow-sm border-primary"></select>
+                                <small class="text-muted small">Hệ thống dựa vào đây để phân loại thư mục ảnh.</small>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Size" class="form-label fw-bold">Kích cỡ</label>
+                                <input asp-for="Size" class="form-control shadow-sm" placeholder="S, M, L, XL, 32, 33..." />
+                                <span asp-validation-for="Size" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Color" class="form-label fw-bold">Màu sắc</label>
+                                <input asp-for="Color" class="form-control shadow-sm" placeholder="Trắng, Đen, Navy..." />
+                                <span asp-validation-for="Color" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold text-primary">📸 Hình ảnh sản phẩm</label>
+                                <div class="input-group shadow-sm">
+                                    <input type="file" name="ImageFile" class="form-control" accept="image/*" id="imageInput" required />
+                                </div>
+                                
+                                <div id="previewContainer" class="mt-3 text-center d-none">
+                                    <div class="position-relative d-inline-block">
+                                        <img id="imagePreview" src="#" alt="Preview" class="img-thumbnail shadow" style="max-height: 200px;">
+                                        <div class="badge bg-success position-absolute top-0 start-100 translate-middle">Mới</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-info mt-2 py-2 small border-0 shadow-sm">
+                                    <i class="fas fa-info-circle"></i> 
+                                    <strong>Ghi chú:</strong> Ảnh sẽ được tự động lưu vào thư mục <code>images/ao</code> hoặc <code>images/quan</code> tương ứng với danh mục bạn chọn.
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Description" class="form-label fw-bold">Mô tả sản phẩm</label>
+                                <textarea asp-for="Description" class="form-control shadow-sm" rows="3" placeholder="Nhập đặc điểm nổi bật của sản phẩm..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-top pt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4 fw-bold">🔙 Quay lại</a>
+                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow fw-bold">🚀 LƯU SẢN PHẨM</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Script xem trước ảnh mượt mà
+        document.getElementById('imageInput').onchange = function (evt) {
+            const [file] = this.files;
+            if (file) {
+                const preview = document.getElementById('imagePreview');
+                const container = document.getElementById('previewContainer');
+                
+                preview.src = URL.createObjectURL(file);
+                container.classList.remove('d-none');
+                
+                // Hiệu ứng nhẹ
+                container.style.opacity = 0;
+                let opacity = 0;
+                const interval = setInterval(() => {
+                    if (opacity >= 1) clearInterval(interval);
+                    container.style.opacity = opacity;
+                    opacity += 0.1;
+                }, 30);
+            }
+        };
+    </script>
+}

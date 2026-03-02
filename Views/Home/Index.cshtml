@@ -1,0 +1,118 @@
+﻿@model IEnumerable<WebsiteBanHang.Models.Product>
+
+@{
+    ViewData["Title"] = "Trang Chủ";
+}
+
+<div class="p-5 mb-4 bg-light rounded-4 shadow-sm" 
+     style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'); 
+            background-size: cover; 
+            background-position: center; 
+            color: white; 
+            min-height: 450px;
+            display: flex;
+            align-items: center;">
+            
+    <div class="container py-5 text-center">
+        <h1 class="display-3 fw-bold">FASHION STORE</h1>
+        <p class="col-md-8 fs-4 mx-auto text-light opacity-75">
+            Đẳng cấp thời trang của bạn. <br/>
+            Khám phá bộ sưu tập Mùa Hè 2026 ngay hôm nay.
+        </p>
+        <div class="mt-4">
+            <a class="btn btn-warning btn-lg px-5 py-3 fw-bold shadow-lg" href="#featured-products">
+                MUA SẮM NGAY
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" id="featured-products">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <h2 class="fw-bold mb-0">🔥 Sản Phẩm Nổi Bật</h2>
+            <p class="text-muted">Đừng bỏ lỡ những mẫu thiết kế mới nhất vừa cập bến.</p>
+        </div>
+        <a asp-controller="Product" asp-action="Index" class="text-decoration-none text-primary fw-bold">Xem tất cả →</a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm product-card">
+                    <div class="position-relative overflow-hidden">
+                        <img src="~/images/@item.ImageUrl" 
+                             class="card-img-top" 
+                             alt="@item.Name" 
+                             style="height: 280px; object-fit: cover; transition: transform 0.5s;">
+                        
+                        <div class="product-overlay d-flex align-items-center justify-content-center">
+                            <a asp-controller="Product" asp-action="Display" asp-route-id="@item.Id" 
+                               class="btn btn-light btn-sm fw-bold shadow-sm px-3">XEM CHI TIẾT</a>
+                        </div>
+                    </div>
+
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold text-dark mb-1">@item.Name</h5>
+                        <p class="card-text text-danger fw-bold fs-5">@item.Price.ToString("#,##0") đ</p>
+                        <div class="d-flex justify-content-center gap-2">
+                            <span class="badge bg-light text-dark border">@item.Size</span>
+                            <span class="badge bg-light text-dark border">@item.Color</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-white border-0 pb-3">
+                        <button class="btn btn-outline-dark w-100 fw-bold">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="container my-5 py-5">
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <h2 class="text-primary mb-3">🚚</h2>
+            <h4 class="fw-bold">Miễn Phí Giao Hàng</h4>
+            <p class="text-muted">Cho đơn hàng trên 500k. Giao hàng trong 24h.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h2 class="text-success mb-3">👗</h2>
+            <h4 class="fw-bold">Thời Trang Xu Hướng</h4>
+            <p class="text-muted">Cập nhật liên tục các mẫu quần áo hot nhất.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h2 class="text-danger mb-3">📞</h2>
+            <h4 class="fw-bold">Hỗ Trợ 24/7</h4>
+            <p class="text-muted">Đổi trả miễn phí trong vòng 7 ngày.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .product-card {
+        transition: transform 0.3s ease, shadow 0.3s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.2);
+        opacity: 0;
+        transition: 0.3s;
+    }
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+    .product-card:hover img {
+        transform: scale(1.1);
+    }
+</style>
