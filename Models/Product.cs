@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace WebsiteBanHang.Models // Đổi namespace theo tên dự án của bạn
 {
     public class Product
@@ -15,7 +16,7 @@ namespace WebsiteBanHang.Models // Đổi namespace theo tên dự án của b�
         public decimal Price { get; set; }
 
         [Display(Name = "Mô tả")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public int CategoryId { get; set; }
 
@@ -27,5 +28,8 @@ namespace WebsiteBanHang.Models // Đổi namespace theo tên dự án của b�
         public string Color { get; set; } // Ví dụ: Xanh, Đỏ, Trắng
         [ValidateNever]
         public string? ImageUrl { get; set; } // Chứa tên file ảnh
+
+        [ForeignKey(nameof(CategoryId))]
+        public Category? Category {get; set;}
     }
 }
