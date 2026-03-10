@@ -49,14 +49,11 @@
                             <div class="col-md-12 mb-3">
                                 <label class="form-label fw-bold text-primary">📸 Hình ảnh sản phẩm</label>
                                 <div class="input-group shadow-sm">
-                                    <input type="file" name="ImageFile" class="form-control" accept="image/*" id="imageInput" required />
+                                    <input type="file" name="ImageFiles" class="form-control" accept="image/*" id="imageInput" multiple required />
                                 </div>
                                 
-                                <div id="previewContainer" class="mt-3 text-center d-none">
-                                    <div class="position-relative d-inline-block">
-                                        <img id="imagePreview" src="#" alt="Preview" class="img-thumbnail shadow" style="max-height: 200px;">
-                                        <div class="badge bg-success position-absolute top-0 start-100 translate-middle">Mới</div>
-                                    </div>
+                                <div id="previewContainer" class="mt-3 text-center d-flex flex-wrap gap-2 d-none">
+                                    <!-- Previews will be inserted here -->
                                 </div>
                                 
                                 <div class="alert alert-info mt-2 py-2 small border-0 shadow-sm">
@@ -85,23 +82,41 @@
 @section Scripts {
     <script>
         // Script xem trước ảnh mượt mà
+        // Script xem trước nhiều ảnh
         document.getElementById('imageInput').onchange = function (evt) {
-            const [file] = this.files;
-            if (file) {
-                const preview = document.getElementById('imagePreview');
-                const container = document.getElementById('previewContainer');
-                
-                preview.src = URL.createObjectURL(file);
+            const container = document.getElementById('previewContainer');
+            container.innerHTML = ''; // Xóa preview cũ
+            
+            if (this.files && this.files.length > 0) {
                 container.classList.remove('d-none');
                 
-                // Hiệu ứng nhẹ
-                container.style.opacity = 0;
-                let opacity = 0;
-                const interval = setInterval(() => {
-                    if (opacity >= 1) clearInterval(interval);
-                    container.style.opacity = opacity;
-                    opacity += 0.1;
-                }, 30);
+                Array.from(this.files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const imgDiv = document.createElement('div');
+                        imgDiv.className = 'position-relative d-inline-block';
+                        
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'img-thumbnail shadow';
+                        img.style.maxHeight = '150px';
+                        
+                        if (index === 0) {
+                            const badge = document.createElement('div');
+                            badge.className = 'badge bg-success position-absolute top-0 start-100 translate-middle';
+                            badge.textContent = 'Chính';
+                            imgDiv.appendChild(badge);
+                        }
+                        
+                        imgDiv.appendChild(img);
+                        container.appendChild(imgDiv);
+                        
+                        imgDiv.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, fill: 'forwards' });
+                    }
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                container.classList.add('d-none');
             }
         };
     </script>

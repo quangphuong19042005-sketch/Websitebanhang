@@ -9,5 +9,7 @@ namespace WebsiteBanHang.Repositories
         void Add(Product product);
         void Update(Product product);
         void Delete(int id);
+        ProductImage GetImageById(int imageId);
+        void DeleteImage(int imageId);
     }
 }

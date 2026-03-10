@@ -5,124 +5,200 @@
 }
 
 <style>
+    body {
+        background-color: #f4f7f6;
+    }
+    .admin-header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 10px 30px rgba(30, 60, 114, 0.2);
+        margin-bottom: 2rem;
+    }
+    .product-img-wrapper {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
     .product-img-zoom {
-        transition: transform 0.3s ease;
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         cursor: pointer;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
-    .product-img-zoom:hover {
-        transform: scale(1.1); /* Phóng to nhẹ khi rê chuột */
+    .product-img-wrapper:hover .product-img-zoom {
+        transform: scale(1.15);
     }
-    .table-hover tbody tr:hover {
+    .table-custom {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+    }
+    .table-custom thead th {
         background-color: #f8f9fa;
-        transition: 0.2s;
+        border-bottom: 2px solid #edf2f9;
+        color: #495057;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        padding: 1.25rem 1.5rem;
     }
+    .table-custom tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid #edf2f9;
+    }
+    .table-custom tbody tr:hover {
+        background-color: #fcfcfc;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+        position: relative;
+        z-index: 10;
+        border-left: 4px solid #2a5298;
+    }
+    .table-custom tbody td {
+        padding: 1rem 1.5rem;
+        vertical-align: middle;
+    }
+    .badge-soft {
+        background-color: #e3f2fd;
+        color: #1565c0;
+        font-weight: 600;
+        padding: 0.5em 0.8em;
+    }
+    .btn-action {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        border: none;
+        text-decoration: none;
+    }
+    .btn-action-view { background-color: #e3f2fd; color: #1565c0; }
+    .btn-action-view:hover { background-color: #1565c0; color: white; transform: translateY(-3px); box-shadow: 0 4px 8px rgba(21, 101, 192, 0.3); }
+    
+    .btn-action-edit { background-color: #fff3e0; color: #ef6c00; }
+    .btn-action-edit:hover { background-color: #ef6c00; color: white; transform: translateY(-3px); box-shadow: 0 4px 8px rgba(239, 108, 0, 0.3); }
+    
+    .btn-action-delete { background-color: #ffebee; color: #c62828; }
+    .btn-action-delete:hover { background-color: #c62828; color: white; transform: translateY(-3px); box-shadow: 0 4px 8px rgba(198, 40, 40, 0.3); }
 </style>
 
-<div class="container-fluid py-4 px-4">
+<div class="container-fluid py-4 px-lg-5">
     
-    <div class="row mb-4 align-items-center">
-        <div class="col-md-8">
-            <h2 class="fw-bold text-dark mb-1">📦 Quản Lý Kho Hàng</h2>
-            <p class="text-muted mb-0">
-                Hiện có <span class="badge bg-primary rounded-pill">@Model.Count()</span> sản phẩm trong hệ thống.
+    <!-- Header Section -->
+    <div class="admin-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold mb-2">📦 Quản Lý Kho Hàng</h2>
+            <p class="mb-0 fs-5 opacity-75" style="letter-spacing: 0.5px;">
+                Tổng quan sản phẩm - Hiện có <span class="badge bg-white text-dark rounded-pill mx-1 fs-6 shadow-sm">@Model.Count()</span> mặt hàng.
             </p>
         </div>
-        <div class="col-md-4 text-end">
-            <a asp-action="Add" class="btn btn-primary btn-lg shadow-sm px-4">
-                <span class="fw-bold">+ Thêm Sản Phẩm Mới</span>
+        <div>
+            <a asp-action="Add" class="btn btn-light btn-lg text-primary fw-bold px-4 rounded-pill shadow" style="transition: all 0.3s;">
+                <i class="fas fa-plus-circle me-2"></i> Thêm Sản Phẩm Mới
             </a>
         </div>
     </div>
 
     @if (!Model.Any())
     {
-        // TRƯỜNG HỢP 1: Chưa có sản phẩm nào (Danh sách trống)
-        <div class="text-center py-5 bg-white rounded-3 shadow-sm">
-            <h1 class="display-1 text-muted">📭</h1>
-            <h4 class="text-muted">Chưa có sản phẩm nào!</h4>
-            <p>Hãy thêm sản phẩm đầu tiên để bắt đầu bán hàng.</p>
-            <a asp-action="Add" class="btn btn-success mt-3">Thêm ngay</a>
+        <!-- Empty State -->
+        <div class="text-center py-5 bg-white rounded-4 shadow-sm" style="border: 2px dashed #dee2e6; max-width: 600px; margin: 0 auto;">
+            <div class="mb-4">
+                <i class="fas fa-box-open text-muted" style="font-size: 5rem; opacity: 0.3;"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-3">Kho hàng đang trống</h3>
+            <p class="text-muted fs-5 mb-4 px-4">Hãy bắt đầu xây dựng cửa hàng của thời trang bạn bằng cách đăng bán sản phẩm đầu tiên.</p>
+            <a asp-action="Add" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow">
+                Thêm ngay bây giờ <i class="fas fa-arrow-right ms-2"></i>
+            </a>
         </div>
     }
     else
     {
-        // TRƯỜNG HỢP 2: Có sản phẩm -> Hiện bảng
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-            <div class="card-body p-0">
-                <table class="table align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr class="text-uppercase text-secondary text-xs fw-bolder" style="font-size: 0.8rem; letter-spacing: 1px;">
-                            <th class="ps-4 py-3">Sản phẩm</th>
-                            <th>Giá bán</th>
-                            <th>Phân loại & Size</th>
-                            <th>Mô tả</th>
-                            <th class="text-center">Hành động</th>
+        <!-- Modern Table Section -->
+        <div class="table-responsive table-custom">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Sản Phẩm</th>
+                        <th>Giá Bán</th>
+                        <th>Phân Loại</th>
+                        <th>Trạng Thái / Mô tả</th>
+                        <th class="text-center pe-4">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="product-img-wrapper flex-shrink-0">
+                                        <img src="~/images/@(string.IsNullOrEmpty(item.ImageUrl) ? "default-product.png" : item.ImageUrl)" 
+                                             alt="@item.Name" 
+                                             class="product-img-zoom" />
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="fw-bold mb-1 text-dark" style="font-size: 1rem;">@item.Name</h6>
+                                        <div class="text-muted small">Mã SP: <span class="fw-bold px-1 bg-light rounded text-dark">#@item.Id</span></div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="fw-bold text-dark fs-5">
+                                    @item.Price.ToString("#,##0") <span class="text-muted fs-6">VNĐ</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge rounded-pill bg-light text-dark border"><i class="fas fa-ruler-horizontal text-muted me-1"></i> @item.Size</span>
+                                    <span class="badge rounded-pill bg-light text-dark border"><i class="fas fa-palette text-muted me-1"></i> @item.Color</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="badge badge-soft rounded-pill mb-1">
+                                    <i class="fas fa-check-circle me-1"></i> Đang bán
+                                </span>
+                                <div class="small text-muted text-truncate" style="max-width: 200px;" title="@item.Description">
+                                    @item.Description
+                                </div>
+                            </td>
+
+                            <td class="text-center pe-4">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a asp-action="Display" asp-route-id="@item.Id" class="btn-action btn-action-view" title="Xem chi tiết">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a asp-action="Update" asp-route-id="@item.Id" class="btn-action btn-action-edit" title="Chỉnh sửa">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn-action btn-action-delete" title="Xóa">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td class="ps-4 py-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="overflow-hidden rounded border" style="width: 70px; height: 70px;">
-                                            <img src="~/images/@item.ImageUrl" 
-                                                 alt="@item.Name" 
-                                                 class="img-fluid w-100 h-100 product-img-zoom"
-                                                 style="object-fit: cover;" />
-                                        </div>
-                                        <div class="ms-3">
-                                            <h6 class="fw-bold mb-0 text-dark">@item.Name</h6>
-                                            <small class="text-muted">ID: #@item.Id</small>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <span class="fw-bold text-success fs-6">
-                                        @item.Price.ToString("#,##0") đ
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <div class="d-flex flex-column gap-1">
-                                        <span class="badge bg-light text-dark border">
-                                            👗 Size: <strong>@item.Size</strong>
-                                        </span>
-                                        <span class="badge bg-light text-dark border">
-                                            🎨 Màu: <strong>@item.Color</strong>
-                                        </span>
-                                    </div>
-                                </td>
-
-                                <td style="max-width: 250px;">
-                                    <p class="text-muted small mb-0 text-truncate">
-                                        @item.Description
-                                    </p>
-                                </td>
-
-                                <td class="text-center">
-                                    <div class="btn-group shadow-sm" role="group">
-                                        <a asp-action="Display" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm" title="Xem chi tiết">
-                                            📂
-                                        </a>
-                                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm" title="Chỉnh sửa">
-                                            ✏️
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm" title="Xóa">
-                                            🗑️
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="card-footer bg-white py-3 border-top-0 d-flex justify-content-end">
-                <small class="text-muted fst-italic">Cập nhật lần cuối: Hôm nay</small>
-            </div>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center mt-4 px-2">
+            <small class="text-muted fw-bold">Tổng số: @Model.Count()</small>
+            <small class="text-muted fst-italic"><i class="fas fa-sync-alt me-1"></i>Dữ liệu được cập nhật theo thời gian thực</small>
         </div>
     }
 </div>

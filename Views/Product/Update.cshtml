@@ -58,17 +58,35 @@
                                 
                                 <div class="mb-3 text-center">
                                     <p class="small text-muted mb-1">Ảnh hiện tại:</p>
-                                    <img src="~/images/@Model.ImageUrl" id="currentImage" class="img-thumbnail shadow-sm" style="max-height: 200px; object-fit: cover;" />
+                                    <div class="d-flex flex-wrap gap-2 justify-content-center" id="currentImagesContainer">
+                                        @if (Model.Images != null && Model.Images.Any())
+                                        {
+                                            foreach (var img in Model.Images)
+                                            {
+                                                <div class="position-relative d-inline-block" id="imageContainer-@img.Id">
+                                                    <img src="~/images/@img.Url" class="img-thumbnail shadow-sm" style="height: 100px; object-fit: cover;" />
+                                                    <button type="button" class="btn btn-danger btn-sm position-absolute top-0 start-100 translate-middle rounded-circle shadow" style="width: 25px; height: 25px; padding: 0; line-height: 1;" onclick="deleteImage(@img.Id)">
+                                                        <i class="fas fa-times" style="font-size: 12px;">X</i>
+                                                    </button>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/@Model.ImageUrl" class="img-thumbnail shadow-sm" style="height: 100px; object-fit: cover;" />
+                                        }
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="small fw-bold">Thay đổi ảnh mới:</label>
-                                    <input type="file" name="ImageFile" class="form-control form-control-sm" id="imageInput" accept="image/*" />
+                                    <label class="small fw-bold">Thêm ảnh mới (Ảnh cũ sẽ bị tải đè nếu có tải mới):</label>
+                                    <input type="file" name="ImageFiles" class="form-control form-control-sm" id="imageInput" accept="image/*" multiple />
                                 </div>
 
-                                <div id="previewContainer" class="text-center d-none">
+                                <div id="previewContainer" class="text-center d-none mt-2">
                                     <p class="small text-success mb-1">Ảnh mới chọn:</p>
-                                    <img id="imagePreview" src="#" class="img-thumbnail border-success" style="max-height: 150px;" />
+                                    <div class="d-flex flex-wrap gap-2 justify-content-center" id="newImagesPreview">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -87,13 +105,58 @@
 @section Scripts {
     <script>
         // Xử lý xem trước ảnh khi người dùng chọn file mới
+        // Xử lý xem trước nhiều ảnh
         document.getElementById('imageInput').onchange = function (evt) {
-            const [file] = this.files;
-            if (file) {
-                document.getElementById('imagePreview').src = URL.createObjectURL(file);
-                document.getElementById('previewContainer').classList.remove('d-none');
-                document.getElementById('currentImage').style.opacity = "0.5";
+            const container = document.getElementById('previewContainer');
+            const previewDiv = document.getElementById('newImagesPreview');
+            previewDiv.innerHTML = '';
+            
+            if (this.files && this.files.length > 0) {
+                container.classList.remove('d-none');
+                document.getElementById('currentImagesContainer').style.opacity = "0.5";
+                
+                Array.from(this.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'img-thumbnail border-success';
+                        img.style.height = '100px';
+                        previewDiv.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                container.classList.add('d-none');
+                document.getElementById('currentImagesContainer').style.opacity = "1";
             }
         };
+
+        function deleteImage(imageId) {
+            if (confirm("Bạn có chắc chắn muốn xóa ảnh này?")) {
+                fetch('/Product/DeleteImage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'imageId=' + imageId
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const container = document.getElementById('imageContainer-' + imageId);
+                        if (container) {
+                            container.remove();
+                        }
+                    } else {
+                        alert("Lỗi khi xóa ảnh: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Đã xảy ra lỗi khi xóa ảnh.");
+                });
+            }
+        }
     </script>
 }

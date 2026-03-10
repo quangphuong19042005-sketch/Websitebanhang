@@ -31,5 +31,7 @@ namespace WebsiteBanHang.Models // Đổi namespace theo tên dự án của b�
 
         [ForeignKey(nameof(CategoryId))]
         public Category? Category {get; set;}
+
+        public List<ProductImage>? Images { get; set; }
     }
 }

@@ -15,12 +15,12 @@ namespace WebsiteBanHang.Repositories
 
         public IEnumerable<Product> GetAll()
         {
-            return _context.Products.Include(p => p.Category).ToList();
+            return _context.Products.Include(p => p.Category).Include(p => p.Images).ToList();
         }
 
         public Product GetById(int id)
         {
-            return _context.Products.Include(p => p.Category).FirstOrDefault(p => p.Id == id);
+            return _context.Products.Include(p => p.Category).Include(p => p.Images).FirstOrDefault(p => p.Id == id);
         }
 
         public void Add(Product product)
@@ -41,6 +41,21 @@ namespace WebsiteBanHang.Repositories
             if (product != null)
             {
                 _context.Products.Remove(product);
+                _context.SaveChanges();
+            }
+        }
+
+        public ProductImage GetImageById(int imageId)
+        {
+            return _context.ProductImages.FirstOrDefault(i => i.Id == imageId);
+        }
+
+        public void DeleteImage(int imageId)
+        {
+            var image = _context.ProductImages.Find(imageId);
+            if (image != null)
+            {
+                _context.ProductImages.Remove(image);
                 _context.SaveChanges();
             }
         }

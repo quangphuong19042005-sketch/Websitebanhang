@@ -93,6 +93,27 @@ namespace WebsiteBanHang.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("WebsiteBanHang.Models.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
+                });
+
             modelBuilder.Entity("WebsiteBanHang.Models.Product", b =>
                 {
                     b.HasOne("WebsiteBanHang.Models.Category", "Category")
@@ -104,9 +125,25 @@ namespace WebsiteBanHang.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("WebsiteBanHang.Models.ProductImage", b =>
+                {
+                    b.HasOne("WebsiteBanHang.Models.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("WebsiteBanHang.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("WebsiteBanHang.Models.Product", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

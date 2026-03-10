@@ -1,73 +1,227 @@
-﻿@model IEnumerable<WebsiteBanHang.Models.Product>
+@model IEnumerable<WebsiteBanHang.Models.Product>
 
 @{
     ViewData["Title"] = "Trang Chủ";
 }
 
-<div class="p-5 mb-4 bg-light rounded-4 shadow-sm" 
-     style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'); 
-            background-size: cover; 
-            background-position: center; 
-            color: white; 
-            min-height: 450px;
-            display: flex;
-            align-items: center;">
+<div class="mb-4 bg-light rounded-4 shadow-sm position-relative overflow-hidden" 
+     style="min-height: 500px; display: flex; align-items: center; background-color: #fcfcfc !important;">
+     
+    <!-- Decorative background elements -->
+    <div class="position-absolute rounded-circle" style="width: 400px; height: 400px; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); top: -100px; right: -50px; opacity: 0.5; z-index: 0;"></div>
+    <div class="position-absolute rounded-circle" style="width: 200px; height: 200px; background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); bottom: -50px; left: -50px; opacity: 0.2; z-index: 0;"></div>
+
             
-    <div class="container py-5 text-center">
-        <h1 class="display-3 fw-bold">FASHION STORE</h1>
-        <p class="col-md-8 fs-4 mx-auto text-light opacity-75">
-            Đẳng cấp thời trang của bạn. <br/>
-            Khám phá bộ sưu tập Mùa Hè 2026 ngay hôm nay.
-        </p>
-        <div class="mt-4">
-            <a class="btn btn-warning btn-lg px-5 py-3 fw-bold shadow-lg" href="#featured-products">
-                MUA SẮM NGAY
-            </a>
+    <div class="container py-5 position-relative z-1">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-center text-lg-start mb-5 mb-lg-0 pr-lg-5">
+                <span class="badge bg-dark px-3 py-2 rounded-pill mb-3 shadow-sm" style="letter-spacing: 2px; font-weight: 500;">NEW ARRIVALS 2026</span>
+                <h1 class="display-3 fw-bolder text-dark mb-3" style="font-family: 'Playfair Display', serif; line-height: 1.1;">
+                    Định Hình <br/><span class="text-primary">Phong Cách</span> Mới
+                </h1>
+                <p class="fs-5 text-muted mb-4 pe-lg-4" style="line-height: 1.6;">
+                    Khám phá bộ sưu tập thời trang cao cấp được tuyển chọn tỉ mỉ. Tự tin thể hiện cá tính riêng của bạn mỗi ngày.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+                    <a class="btn btn-dark btn-lg px-5 py-3 fw-bold rounded-pill shadow" href="#featured-products" style="transition: all 0.3s ease;">
+                        MUA SẮM NGAY <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                    <a class="btn btn-outline-secondary btn-lg px-5 py-3 fw-bold rounded-pill" href="#" style="transition: all 0.3s ease;">
+                        XEM BỘ SƯU TẬP
+                    </a>
+                </div>
+                
+                <div class="mt-5 d-flex align-items-center justify-content-center justify-content-lg-start gap-4">
+                    <div class="text-center">
+                        <h4 class="fw-bold mb-0 text-dark">500+</h4>
+                        <span class="text-muted small text-uppercase" style="letter-spacing: 1px;">Sản phẩm</span>
+                    </div>
+                    <div style="width: 1px; height: 40px; background-color: #dee2e6;"></div>
+                    <div class="text-center">
+                        <h4 class="fw-bold mb-0 text-dark">10k+</h4>
+                        <span class="text-muted small text-uppercase" style="letter-spacing: 1px;">Khách hàng</span>
+                    </div>
+                    <div style="width: 1px; height: 40px; background-color: #dee2e6;"></div>
+                    <div class="text-center">
+                        <h4 class="fw-bold mb-0 text-dark">4.9/5</h4>
+                        <span class="text-muted small text-uppercase" style="letter-spacing: 1px;">Đánh giá</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hero Images Grid -->
+            <div class="col-lg-6 d-none d-md-block">
+                <div class="row g-3 px-4">
+                    <div class="col-6 mt-5 pt-3">
+                        <div class="rounded-4 overflow-hidden shadow-lg position-relative hero-img-wrap" style="height: 350px;">
+                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=700&q=80" 
+                                 class="w-100 h-100 object-fit-cover hover-scale" alt="Fashion 1">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="rounded-4 overflow-hidden shadow mb-3 position-relative hero-img-wrap" style="height: 220px;">
+                            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=700&q=80" 
+                                 class="w-100 h-100 object-fit-cover hover-scale" alt="Fashion 2">
+                        </div>
+                        <div class="rounded-4 overflow-hidden shadow position-relative hero-img-wrap" style="height: 180px;">
+                            <img src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&auto=format&fit=crop&w=700&q=80" 
+                                 class="w-100 h-100 object-fit-cover hover-scale" alt="Fashion 3">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="container mt-5" id="featured-products">
-    <div class="d-flex justify-content-between align-items-end mb-4">
-        <div>
-            <h2 class="fw-bold mb-0">🔥 Sản Phẩm Nổi Bật</h2>
-            <p class="text-muted">Đừng bỏ lỡ những mẫu thiết kế mới nhất vừa cập bến.</p>
-        </div>
-        <a asp-controller="Product" asp-action="Index" class="text-decoration-none text-primary fw-bold">Xem tất cả →</a>
-    </div>
+<!-- Shop The Look Section -->
+<div class="py-5 position-relative bg-white" style="overflow: hidden;">
+    <!-- Background subtle texture/pattern -->
+    <div class="position-absolute w-100 h-100 top-0 start-0" style="background-image: radial-gradient(#e5e5e5 1px, transparent 1px); background-size: 20px 20px; opacity: 0.5; z-index: 0;"></div>
+    
+    <div class="container my-5 position-relative z-1">
+        <div class="row align-items-center bg-light rounded-4 shadow-sm p-4 p-md-5 mx-0">
+            <!-- Left Column: Typography & Info -->
+            <div class="col-lg-5 mb-5 mb-lg-0 pe-lg-5 text-center text-lg-start">
+                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-3 fw-bold" style="letter-spacing: 1px;">SIZE GUIDE</span>
+                <h2 class="display-5 fw-bold mb-4" style="font-family: 'Playfair Display', serif; color: #1a1a1a;">
+                    Vừa Vặn & <br/><span class="text-primary">Tôn Dáng</span>
+                </h2>
+                <p class="fs-5 text-muted mb-4 pe-lg-4" style="line-height: 1.6;">
+                    Hiểu rõ số đo cơ thể là bí quyết để mặc đẹp. Chúng tôi thiết kế biểu đồ đo chuẩn xác giúp bạn chọn đúng kích cỡ ngay từ lần đầu tiên.
+                </p>
+                
+                <div class="bg-white rounded-3 shadow-sm p-3 mb-4">
+                    <ul class="list-unstyled mb-0 text-start">
+                        <li class="d-flex align-items-center mb-3">
+                            <i class="fas fa-check-circle text-success fs-5 me-3"></i>
+                            <span class="fw-medium">Chuẩn dáng người Châu Á</span>
+                        </li>
+                        <li class="d-flex align-items-center mb-3">
+                            <i class="fas fa-check-circle text-success fs-5 me-3"></i>
+                            <span class="fw-medium">Đổi trả miễn phí nếu không vừa</span>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <i class="fas fa-check-circle text-success fs-5 me-3"></i>
+                            <span class="fw-medium">Tư vấn size 24/7 từ Stylist</span>
+                        </li>
+                    </ul>
+                </div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-        @foreach (var item in Model)
-        {
-            <div class="col">
-                <div class="card h-100 border-0 shadow-sm product-card">
-                    <div class="position-relative overflow-hidden">
-                        <img src="~/images/@item.ImageUrl" 
-                             class="card-img-top" 
-                             alt="@item.Name" 
-                             style="height: 280px; object-fit: cover; transition: transform 0.5s;">
-                        
-                        <div class="product-overlay d-flex align-items-center justify-content-center">
-                            <a asp-controller="Product" asp-action="Display" asp-route-id="@item.Id" 
-                               class="btn btn-light btn-sm fw-bold shadow-sm px-3">XEM CHI TIẾT</a>
-                        </div>
-                    </div>
-
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold text-dark mb-1">@item.Name</h5>
-                        <p class="card-text text-danger fw-bold fs-5">@item.Price.ToString("#,##0") đ</p>
-                        <div class="d-flex justify-content-center gap-2">
-                            <span class="badge bg-light text-dark border">@item.Size</span>
-                            <span class="badge bg-light text-dark border">@item.Color</span>
-                        </div>
-                    </div>
-                    
-                    <div class="card-footer bg-white border-0 pb-3">
-                        <button class="btn btn-outline-dark w-100 fw-bold">THÊM VÀO GIỎ</button>
-                    </div>
+                <div class="d-flex gap-3 justify-content-center justify-content-lg-start mt-4">
+                    <button class="btn btn-dark btn-lg px-4 py-3 fw-bold shadow">
+                        <i class="fas fa-ruler-combined me-2"></i> BẢNG SIZE CHI TIẾT
+                    </button>
+                    <button class="btn btn-outline-dark btn-lg px-4 py-3 fw-bold">
+                        <i class="fas fa-headset me-2"></i> NHỜ TƯ VẤN
+                    </button>
                 </div>
             </div>
-        }
+
+            <!-- Right Column: Interactive Image -->
+            <div class="col-lg-7 position-relative text-center">
+                <!-- Decorative elements for the image -->
+                <div class="position-absolute bg-primary rounded-circle" style="width: 300px; height: 300px; top: -20px; right: 0; filter: blur(60px); opacity: 0.15; z-index: 0;"></div>
+                <div class="position-absolute bg-warning rounded-circle" style="width: 250px; height: 250px; bottom: -20px; left: 0; filter: blur(50px); opacity: 0.15; z-index: 0;"></div>
+
+                <div class="position-relative d-inline-block z-1" style="max-width: 100%;">
+                    <div class="shadow-lg rounded-4 overflow-hidden border border-4 border-white">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=700&q=80" 
+                             alt="Model Size Guide" 
+                             class="img-fluid" 
+                             style="max-height: 550px; object-fit: cover;">
+                    </div>
+                    
+                    <!-- Hotspot 1: Vai -->
+                    <div class="hotspot-wrapper" style="top: 15%; left: 42%;">
+                        <div class="hotspot-dot"></div>
+                        <div class="hotspot-pulse"></div>
+                        
+                        <div class="hotspot-card left-card shadow-lg bg-white p-3 rounded-3 border-start border-4 border-dark">
+                            <h6 class="fw-bold mb-1">VAI</h6>
+                            <hr class="my-1 border-dark border-2 opacity-100">
+                            <p class="small text-muted mb-0">Đo khoảng cách 2 đầu vai</p>
+                        </div>
+                    </div>
+
+                    <!-- Hotspot 2: Ngực -->
+                    <div class="hotspot-wrapper" style="top: 29%; left: 50%;">
+                        <div class="hotspot-dot"></div>
+                        <div class="hotspot-pulse"></div>
+                        
+                        <div class="hotspot-card right-card shadow-lg bg-white p-3 rounded-3 border-start border-4 border-dark">
+                            <h6 class="fw-bold mb-1">NGỰC - VÒNG 1</h6>
+                            <hr class="my-1 border-dark border-2 opacity-100">
+                            <p class="small text-muted mb-0">Đo vòng tròn từ lưng đến phần nhô cao nhất ngực</p>
+                        </div>
+                    </div>
+
+                    <!-- Hotspot 3: Hông -->
+                    <div class="hotspot-wrapper" style="top: 45%; left: 45%;">
+                        <div class="hotspot-dot"></div>
+                        <div class="hotspot-pulse"></div>
+                        
+                        <div class="hotspot-card right-card shadow-lg bg-white p-3 rounded-3 border-start border-4 border-dark">
+                            <h6 class="fw-bold mb-1">VÒNG HÔNG</h6>
+                            <hr class="my-1 border-dark border-2 opacity-100">
+                            <p class="small text-muted mb-0">Đo vòng quanh hông ở vị trí có số đo lớn nhất</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Helper text -->
+                <p class="mt-4 text-muted small fst-italic">
+                    <i class="fas fa-magic me-1"></i> Di chuột vào các chấm đen trên hình để xem chú thích chi tiết
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products Section -->
+<div class="py-5" style="background-color: #f8f9fa;">
+    <div class="container" id="featured-products">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h2 class="fw-bold mb-2">🔥 Sản Phẩm Nổi Bật</h2>
+                <p class="text-muted mb-0">Đừng bỏ lỡ những mẫu thiết kế mới nhất vừa cập bến.</p>
+            </div>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">Xem tất cả →</a>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-2">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm product-card">
+                        <div class="position-relative overflow-hidden">
+                            <img src="~/images/@(string.IsNullOrEmpty(item.ImageUrl) ? "default-product.png" : item.ImageUrl)" 
+                                 class="card-img-top" 
+                                 alt="@item.Name" 
+                                 style="height: 280px; object-fit: cover; transition: transform 0.5s;">
+                            
+                            <div class="product-overlay d-flex align-items-center justify-content-center">
+                                <a asp-controller="Product" asp-action="Display" asp-route-id="@item.Id" 
+                                   class="btn btn-light btn-sm fw-bold shadow-sm px-3">XEM CHI TIẾT</a>
+                            </div>
+                        </div>
+
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold text-dark mb-1">@item.Name</h5>
+                            <p class="card-text text-danger fw-bold fs-5">@item.Price.ToString("#,##0") đ</p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <span class="badge bg-light text-dark border">@item.Size</span>
+                                <span class="badge bg-light text-dark border">@item.Color</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer bg-white border-0 pb-3">
+                            <button class="btn btn-outline-dark w-100 fw-bold">THÊM VÀO GIỎ</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>
 
@@ -115,4 +269,181 @@
     .product-card:hover img {
         transform: scale(1.1);
     }
+
+    .hover-scale {
+        transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .hero-img-wrap:hover .hover-scale {
+        transform: scale(1.08);
+    }
+    .btn-dark:hover {
+        background-color: #343a40 !important;
+        transform: translateY(-2px);
+    }
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+        color: #212529;
+        transform: translateY(-2px);
+    }
+
+    /* Hotspot Styles */
+    .hotspot-wrapper {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        cursor: pointer;
+    }
+
+    .hotspot-dot {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background-color: #000;
+        border-radius: 50%;
+        top: 6px;
+        left: 6px;
+        z-index: 2;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .hotspot-pulse {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        border-radius: 50%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+    /* Info Cards */
+    .hotspot-card {
+        position: absolute;
+        width: 250px;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        z-index: 20;
+        text-align: left;
+    }
+
+    .hotspot-card.left-card {
+        right: 40px;
+        top: 50%;
+        transform: translateY(-50%) translateX(-20px);
+    }
+
+    .hotspot-card.right-card {
+        left: 40px;
+        top: 50%;
+        transform: translateY(-50%) translateX(20px);
+    }
+
+    /* Connectors (optional, visual flair) */
+    .hotspot-line {
+        position: absolute;
+        width: 100px;
+        height: 50px;
+        pointer-events: none;
+        opacity: 0;
+    }
+    .hotspot-line.left-line {
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .line-path {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+    }
 </style>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof anime === 'undefined') return;
+
+            // Continuous pulse animation for all hotspots
+            anime({
+                targets: '.hotspot-pulse',
+                scale: [1, 2.5],
+                opacity: [0.8, 0],
+                easing: 'easeOutExpo',
+                duration: 1500,
+                loop: true
+            });
+
+            // Setup Interactions for each hotspot
+            const hotspots = document.querySelectorAll('.hotspot-wrapper');
+            
+            hotspots.forEach(hotspot => {
+                const card = hotspot.querySelector('.hotspot-card');
+                
+                let isHovered = false;
+                let animationTimeline = null;
+
+                hotspot.addEventListener('mouseenter', () => {
+                    isHovered = true;
+                    
+                    if(animationTimeline) animationTimeline.pause();
+
+                    animationTimeline = anime.timeline({
+                        easing: 'easeOutExpo'
+                    });
+
+                    const translateX = card.classList.contains('right-card') ? [20, 0] : [-20, 0];
+                    animationTimeline.add({
+                        targets: card,
+                        opacity: [0, 1],
+                        translateX: translateX,
+                        duration: 600,
+                        begin: () => {
+                            card.style.visibility = 'visible';
+                        }
+                    });
+                    
+                    anime({
+                        targets: hotspot.querySelector('.hotspot-dot'),
+                        scale: 1.5,
+                        duration: 300,
+                        easing: 'easeOutBack'
+                    });
+                });
+
+                hotspot.addEventListener('mouseleave', () => {
+                    isHovered = false;
+                    
+                    if(animationTimeline) animationTimeline.pause();
+
+                    const translateX = card.classList.contains('right-card') ? 20 : -20;
+                    
+                    anime({
+                        targets: card,
+                        opacity: 0,
+                        translateX: translateX,
+                        duration: 300,
+                        easing: 'easeInQuad',
+                        complete: () => {
+                            if(!isHovered) card.style.visibility = 'hidden';
+                        }
+                    });
+
+                    anime({
+                        targets: hotspot.querySelector('.hotspot-dot'),
+                        scale: 1,
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                });
+            });
+        });
+    </script>
+}
+
+
