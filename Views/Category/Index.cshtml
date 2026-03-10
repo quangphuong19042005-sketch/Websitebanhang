@@ -1,0 +1,136 @@
+@model IEnumerable<WebsiteBanHang.Models.Category>
+
+@{
+    ViewData["Title"] = "Quản lý danh mục";
+}
+
+<div class="container-fluid py-4 bg-light min-vh-100">
+    <div class="container">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">
+                    <i class="fas fa-tags text-primary me-2"></i>Quản Lý Danh Mục
+                </h2>
+                <p class="text-muted mb-0">Xem và quản lý các loại sản phẩm trong hệ thống.</p>
+            </div>
+            <a asp-action="Add" class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 shadow-sm rounded-pill fw-bold">
+                <i class="fas fa-plus-circle"></i> THÊM DANH MỤC MỚI
+            </a>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+                <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <!-- Categories Card -->
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-dark text-white">
+                            <tr>
+                                <th class="ps-4 py-3" style="width: 80px;">ID</th>
+                                <th class="py-3">Tên Danh Mục</th>
+                                <th class="py-3">Folder Ảnh</th>
+                                <th class="py-3 text-end pe-4">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="fas fa-folder-open mb-3" style="font-size: 3rem;"></i>
+                                            <h5>Chưa có danh mục nào.</h5>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="ps-4 fw-bold text-secondary">#@item.Id</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+                                                    <i class="fas fa-folder text-primary"></i>
+                                                </div>
+                                                <span class="fw-bold text-dark">@item.Name</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <code class="bg-light px-2 py-1 rounded text-primary">@item.FolderName</code>
+                                        </td>
+                                        <td class="text-end pe-4">
+                                            <div class="btn-group">
+                                                <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm rounded-pill me-2 px-3 shadow-none">
+                                                    <i class="fas fa-edit me-1"></i> Sửa
+                                                </a>
+                                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 shadow-none" 
+                                                        onclick="confirmDelete(@item.Id, '@item.Name')">
+                                                    <i class="fas fa-trash-alt me-1"></i> Xóa
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-body text-center p-5">
+                <i class="fas fa-exclamation-triangle text-danger mb-4" style="font-size: 4rem;"></i>
+                <h3 class="fw-bold mb-3">Xác nhận xóa?</h3>
+                <p class="text-muted mb-4">Bạn có chắc chắn muốn xóa danh mục <span id="categoryName" class="fw-bold text-dark"></span>? Hành động này không thể hoàn tác.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="button" class="btn btn-light px-4 rounded-pill fw-bold" data-bs-dismiss="modal">HỦY BỎ</button>
+                    <form id="deleteForm" method="post" asp-action="Delete">
+                        <input type="hidden" name="id" id="categoryId" />
+                        <button type="submit" class="btn btn-danger px-4 rounded-pill fw-bold shadow-sm">XÓA NGAY</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(id, name) {
+        document.getElementById('categoryId').value = id;
+        document.getElementById('categoryName').innerText = name;
+        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+    }
+</script>
+
+<style>
+    .table thead th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+    }
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+    .table tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.002);
+    }
+</style>

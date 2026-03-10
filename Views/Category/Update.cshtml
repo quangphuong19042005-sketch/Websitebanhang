@@ -1,0 +1,70 @@
+@model WebsiteBanHang.Models.Category
+
+@{
+    ViewData["Title"] = "Cập nhật danh mục";
+}
+
+<div class="container-fluid py-5 bg-light min-vh-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <!-- Header -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Quản lý danh mục</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa</li>
+                    </ol>
+                </nav>
+
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="card-header bg-dark text-white p-4">
+                        <h4 class="fw-bold mb-0"><i class="fas fa-edit text-info me-2"></i>Chỉnh Sửa Danh Mục</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form asp-action="Update" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+
+                            <div class="mb-4">
+                                <label asp-for="Name" class="form-label fw-bold text-dark">Tên Danh Mục</label>
+                                <div class="input-group shadow-sm rounded-3">
+                                    <span class="input-group-text bg-white border-0"><i class="fas fa-tag text-muted"></i></span>
+                                    <input asp-for="Name" class="form-control border-0 py-2 ps-2" placeholder="Nhập tên mới..." />
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small mt-1"></span>
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="FolderName" class="form-label fw-bold text-dark">Folder Tên Ảnh</label>
+                                <div class="input-group shadow-sm rounded-3">
+                                    <span class="input-group-text bg-white border-0"><i class="fas fa-folder-open text-muted"></i></span>
+                                    <input asp-for="FolderName" class="form-control border-0 py-2 ps-2" placeholder="Nhập tên folder mới..." />
+                                </div>
+                                <div class="form-text mt-2"><i class="fas fa-exclamation-triangle text-warning me-1"></i> Lưu ý: Nếu thay đổi FolderName, bạn có thể cần di chuyển các ảnh sản phẩm hiện có sang thư mục mới theo cách thủ công.</div>
+                                <span asp-validation-for="FolderName" class="text-danger small mt-1"></span>
+                            </div>
+
+                            <div class="d-flex gap-3 pt-3">
+                                <button type="submit" class="btn btn-info text-white px-5 py-2 rounded-pill fw-bold shadow-sm flex-grow-1">
+                                    <i class="fas fa-check-circle me-2"></i> CẬP NHẬT
+                                </button>
+                                <a asp-action="Index" class="btn btn-light px-4 py-2 rounded-pill fw-bold text-muted border flex-shrink-0">HỦY BỎ</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<style>
+    .form-control:focus {
+        box-shadow: none;
+        background-color: #fff;
+    }
+</style>
