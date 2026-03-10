@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebsiteBanHang.Models;
 using WebsiteBanHang.Repositories;
+using WebsiteBanHang.ViewModels;
 
 namespace WebsiteBanHang.Controllers
 {
@@ -21,38 +22,44 @@ namespace WebsiteBanHang.Controllers
         }
 
         // 1. Danh sách sản phẩm
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _productRepository.GetAll();
+            var products = await _productRepository.GetAllAsync();
             return View(products);
         }
 
         // 2. Form thêm mới
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
-            var categories = _categoryRepository.GetAllCategories();
-            ViewBag.Categories = new SelectList(categories, "Id", "Name");
-            return View();
+            var categories = await _categoryRepository.GetAllCategoriesAsync();
+            var viewModel = new ProductFormViewModel
+            {
+                Product = new Product(),
+                Categories = new SelectList(categories, "Id", "Name")
+            };
+            return View(viewModel);
         }
 
         // 3. Xử lý thêm mới
         [HttpPost]
-        public async Task<IActionResult> Add(Product product, List<IFormFile> ImageFiles)
+        public async Task<IActionResult> Add(ProductFormViewModel viewModel, List<IFormFile> ImageFiles)
         {
+            var product = viewModel.Product;
             // Xóa lỗi validation của ImageUrl vì chúng ta sẽ tự gán giá trị ở dưới
-            ModelState.Remove("ImageUrl");
+            ModelState.Remove("Product.ImageUrl");
+            ModelState.Remove("Categories"); // ViewModel UI Property
 
             if (ModelState.IsValid)
             {
                 if (ImageFiles != null && ImageFiles.Count > 0)
                 {
-                    string folderName = GetFolderNameByCategoryId(product.CategoryId);
+                    string folderName = await GetFolderNameByCategoryIdAsync(product.CategoryId);
                     product.Images = new List<ProductImage>();
 
                     for (int i = 0; i < ImageFiles.Count; i++)
                     {
                         var file = ImageFiles[i];
-                        string url = await SaveImage(file, folderName);
+                        string url = await SaveImageAsync(file, folderName);
                         if (i == 0)
                         {
                             product.ImageUrl = url; // Lưu ảnh đầu tiên vào ImageUrl để giữ tương thích
@@ -61,53 +68,59 @@ namespace WebsiteBanHang.Controllers
                     }
                 }
 
-                _productRepository.Add(product);
+                await _productRepository.AddAsync(product);
                 return RedirectToAction("Index");
             }
 
             // Nếu không hợp lệ, nạp lại Dropdown
-            var categories = _categoryRepository.GetAllCategories();
-            ViewBag.Categories = new SelectList(categories, "Id", "Name");
-            return View(product);
+            var categories = await _categoryRepository.GetAllCategoriesAsync();
+            viewModel.Categories = new SelectList(categories, "Id", "Name");
+            return View(viewModel);
         }
 
         // 4. Xem chi tiết
-        public IActionResult Display(int id)
+        public async Task<IActionResult> Display(int id)
         {
-            var product = _productRepository.GetById(id);
+            var product = await _productRepository.GetByIdAsync(id);
             if (product == null) return NotFound();
             return View(product);
         }
 
         // 5. Form cập nhật
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int id)
         {
-            var product = _productRepository.GetById(id);
+            var product = await _productRepository.GetByIdAsync(id);
             if (product == null) return NotFound();
 
-            var categories = _categoryRepository.GetAllCategories();
-            ViewBag.Categories = new SelectList(categories, "Id", "Name", product.CategoryId);
-            return View(product);
+            var categories = await _categoryRepository.GetAllCategoriesAsync();
+            var viewModel = new ProductFormViewModel
+            {
+                Product = product,
+                Categories = new SelectList(categories, "Id", "Name", product.CategoryId)
+            };
+            return View(viewModel);
         }
 
         // 6. Xử lý cập nhật
         [HttpPost]
-        public async Task<IActionResult> Update(Product product, List<IFormFile> ImageFiles)
+        public async Task<IActionResult> Update(ProductFormViewModel viewModel, List<IFormFile> ImageFiles)
         {
+            var product = viewModel.Product;
             ModelState.Remove("ImageFiles"); // Tránh lỗi validation file nếu không chọn ảnh mới
-            ModelState.Remove("ImageUrl");
+            ModelState.Remove("Product.ImageUrl");
+            ModelState.Remove("Categories");
 
             if (ModelState.IsValid)
             {
                 if (ImageFiles != null && ImageFiles.Count > 0)
                 {
-                    string folderName = GetFolderNameByCategoryId(product.CategoryId);
+                    string folderName = await GetFolderNameByCategoryIdAsync(product.CategoryId);
                     product.Images = new List<ProductImage>();
 
                     for (int i = 0; i < ImageFiles.Count; i++)
                     {
                         var file = ImageFiles[i];
-                        string url = await SaveImage(file, folderName);
+                        string url = await SaveImageAsync(file, folderName);
                         if (i == 0)
                         {
                             product.ImageUrl = url;
@@ -117,37 +130,37 @@ namespace WebsiteBanHang.Controllers
                 }
                 // Nếu không chọn ảnh mới, ImageUrl sẽ giữ giá trị từ input hidden trong View
 
-                _productRepository.Update(product);
+                await _productRepository.UpdateAsync(product);
                 return RedirectToAction("Index");
             }
 
-            var categories = _categoryRepository.GetAllCategories();
-            ViewBag.Categories = new SelectList(categories, "Id", "Name", product.CategoryId);
-            return View(product);
+            var categories = await _categoryRepository.GetAllCategoriesAsync();
+            viewModel.Categories = new SelectList(categories, "Id", "Name", product.CategoryId);
+            return View(viewModel);
         }
 
         // 7. Form xác nhận xóa
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var product = _productRepository.GetById(id);
+            var product = await _productRepository.GetByIdAsync(id);
             if (product == null) return NotFound();
             return View(product);
         }
 
         // 8. Thực hiện xóa
         [HttpPost, ActionName("DeleteConfirmed")]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _productRepository.Delete(id);
+            await _productRepository.DeleteAsync(id);
             return RedirectToAction("Index");
         }
 
         // --- HÀM HỖ TRỢ ---
 
         [HttpPost]
-        public IActionResult DeleteImage(int imageId)
+        public async Task<IActionResult> DeleteImage(int imageId)
         {
-            var image = _productRepository.GetImageById(imageId);
+            var image = await _productRepository.GetImageByIdAsync(imageId);
             if (image == null)
             {
                 return Json(new { success = false, message = "Không tìm thấy ảnh" });
@@ -164,21 +177,21 @@ namespace WebsiteBanHang.Controllers
             }
 
             // Xóa trong database
-            _productRepository.DeleteImage(imageId);
+            await _productRepository.DeleteImageAsync(imageId);
 
             // Cập nhật ImageUrl của Product nếu xóa ảnh hiển thị chính
-            var product = _productRepository.GetById(productId);
+            var product = await _productRepository.GetByIdAsync(productId);
             if (product != null && product.ImageUrl == deletedUrl)
             {
                 var remainingImage = product.Images?.FirstOrDefault(i => i.Id != imageId);
                 product.ImageUrl = remainingImage?.Url; // Gán lại thành ảnh đầu tiên hoặc null
-                _productRepository.Update(product);
+                await _productRepository.UpdateAsync(product);
             }
 
             return Json(new { success = true });
         }
 
-        private async Task<string> SaveImage(IFormFile image, string folderName)
+        private async Task<string> SaveImageAsync(IFormFile image, string folderName)
         {
             // Tạo đường dẫn: wwwroot/images/ao hoặc wwwroot/images/quan
             string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", folderName);
@@ -197,10 +210,11 @@ namespace WebsiteBanHang.Controllers
             return folderName + "/" + uniqueFileName;
         }
 
-        private string GetFolderNameByCategoryId(int categoryId)
+        private async Task<string> GetFolderNameByCategoryIdAsync(int categoryId)
         {
-            // Logic: ID 1 là Áo, các ID khác mặc định là Quần
-            return categoryId == 1 ? "ao" : "quan";
+            var category = await _categoryRepository.GetByIdAsync(categoryId);
+            // Nếu foldername trống thì tạo tên ngẫu nhiên hoặc "default"
+            return !string.IsNullOrWhiteSpace(category?.FolderName) ? category.FolderName : "others";
         }
     }
 }

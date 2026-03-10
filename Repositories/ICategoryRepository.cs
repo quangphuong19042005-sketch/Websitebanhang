@@ -4,6 +4,7 @@ namespace WebsiteBanHang.Repositories
 {
     public interface ICategoryRepository
     {
-        IEnumerable<Category> GetAllCategories();
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
+        Task<Category?> GetByIdAsync(int id);
     }
 }

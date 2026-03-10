@@ -1,4 +1,4 @@
-@model WebsiteBanHang.Models.Product
+@model WebsiteBanHang.ViewModels.ProductFormViewModel
 
 @{
     ViewData["Title"] = "Thêm sản phẩm mới";
@@ -17,33 +17,33 @@
                         
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label asp-for="Name" class="form-label fw-bold">Tên sản phẩm</label>
-                                <input asp-for="Name" class="form-control shadow-sm" placeholder="Ví dụ: Áo thun Polo, Quần Tây Âu..." />
-                                <span asp-validation-for="Name" class="text-danger small"></span>
+                                <label asp-for="Product.Name" class="form-label fw-bold">Tên sản phẩm</label>
+                                <input asp-for="Product.Name" class="form-control shadow-sm" placeholder="Ví dụ: Áo thun Polo, Quần Tây Âu..." />
+                                <span asp-validation-for="Product.Name" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label asp-for="Price" class="form-label fw-bold">Giá bán (VNĐ)</label>
-                                <input asp-for="Price" type="number" class="form-control shadow-sm" placeholder="0" />
-                                <span asp-validation-for="Price" class="text-danger small"></span>
+                                <label asp-for="Product.Price" class="form-label fw-bold">Giá bán (VNĐ)</label>
+                                <input asp-for="Product.Price" type="number" class="form-control shadow-sm" placeholder="0" />
+                                <span asp-validation-for="Product.Price" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label asp-for="CategoryId" class="form-label fw-bold">Danh mục</label>
-                                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select shadow-sm border-primary"></select>
+                                <label asp-for="Product.CategoryId" class="form-label fw-bold">Danh mục</label>
+                                <select asp-for="Product.CategoryId" asp-items="Model.Categories" class="form-select shadow-sm border-primary"></select>
                                 <small class="text-muted small">Hệ thống dựa vào đây để phân loại thư mục ảnh.</small>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label asp-for="Size" class="form-label fw-bold">Kích cỡ</label>
-                                <input asp-for="Size" class="form-control shadow-sm" placeholder="S, M, L, XL, 32, 33..." />
-                                <span asp-validation-for="Size" class="text-danger small"></span>
+                                <label asp-for="Product.Size" class="form-label fw-bold">Kích cỡ</label>
+                                <input asp-for="Product.Size" class="form-control shadow-sm" placeholder="S, M, L, XL, 32, 33..." />
+                                <span asp-validation-for="Product.Size" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label asp-for="Color" class="form-label fw-bold">Màu sắc</label>
-                                <input asp-for="Color" class="form-control shadow-sm" placeholder="Trắng, Đen, Navy..." />
-                                <span asp-validation-for="Color" class="text-danger small"></span>
+                                <label asp-for="Product.Color" class="form-label fw-bold">Màu sắc</label>
+                                <input asp-for="Product.Color" class="form-control shadow-sm" placeholder="Trắng, Đen, Navy..." />
+                                <span asp-validation-for="Product.Color" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-12 mb-3">
@@ -58,13 +58,13 @@
                                 
                                 <div class="alert alert-info mt-2 py-2 small border-0 shadow-sm">
                                     <i class="fas fa-info-circle"></i> 
-                                    <strong>Ghi chú:</strong> Ảnh sẽ được tự động lưu vào thư mục <code>images/ao</code> hoặc <code>images/quan</code> tương ứng với danh mục bạn chọn.
+                                    <strong>Ghi chú:</strong> Tùy thuộc vào Cài đặt Thư mục Danh mục, ảnh sẽ phân loại đúng vị trí.
                                 </div>
                             </div>
 
                             <div class="col-md-12 mb-4">
-                                <label asp-for="Description" class="form-label fw-bold">Mô tả sản phẩm</label>
-                                <textarea asp-for="Description" class="form-control shadow-sm" rows="3" placeholder="Nhập đặc điểm nổi bật của sản phẩm..."></textarea>
+                                <label asp-for="Product.Description" class="form-label fw-bold">Mô tả sản phẩm</label>
+                                <textarea asp-for="Product.Description" class="form-control shadow-sm" rows="3" placeholder="Nhập đặc điểm nổi bật của sản phẩm..."></textarea>
                             </div>
                         </div>
 

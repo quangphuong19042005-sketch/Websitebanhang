@@ -1,4 +1,4 @@
-@model WebsiteBanHang.Models.Product
+@model WebsiteBanHang.ViewModels.ProductFormViewModel
 
 @{
     ViewData["Title"] = "Cập nhật sản phẩm";
@@ -9,47 +9,47 @@
         <div class="col-md-9">
             <div class="card shadow border-0 rounded-4">
                 <div class="card-header bg-warning py-3">
-                    <h4 class="mb-0 fw-bold text-dark">✏️ Chỉnh Sửa Sản Phẩm: @Model.Name</h4>
+                    <h4 class="mb-0 fw-bold text-dark">✏️ Chỉnh Sửa Sản Phẩm: @Model.Product.Name</h4>
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Update" method="post" enctype="multipart/form-data">
-                        <input type="hidden" asp-for="Id" />
-                        <input type="hidden" asp-for="ImageUrl" />
+                        <input type="hidden" asp-for="Product.Id" />
+                        <input type="hidden" asp-for="Product.ImageUrl" />
 
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="mb-3">
-                                    <label asp-for="Name" class="form-label fw-bold">Tên sản phẩm</label>
-                                    <input asp-for="Name" class="form-control shadow-sm" />
-                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                    <label asp-for="Product.Name" class="form-label fw-bold">Tên sản phẩm</label>
+                                    <input asp-for="Product.Name" class="form-control shadow-sm" />
+                                    <span asp-validation-for="Product.Name" class="text-danger small"></span>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label asp-for="Price" class="form-label fw-bold">Giá bán (VNĐ)</label>
-                                        <input asp-for="Price" type="number" class="form-control shadow-sm" />
-                                        <span asp-validation-for="Price" class="text-danger small"></span>
+                                        <label asp-for="Product.Price" class="form-label fw-bold">Giá bán (VNĐ)</label>
+                                        <input asp-for="Product.Price" type="number" class="form-control shadow-sm" />
+                                        <span asp-validation-for="Product.Price" class="text-danger small"></span>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label asp-for="CategoryId" class="form-label fw-bold">Danh mục</label>
-                                        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select shadow-sm"></select>
+                                        <label asp-for="Product.CategoryId" class="form-label fw-bold">Danh mục</label>
+                                        <select asp-for="Product.CategoryId" asp-items="Model.Categories" class="form-select shadow-sm"></select>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label asp-for="Size" class="form-label fw-bold">Kích cỡ</label>
-                                        <input asp-for="Size" class="form-control shadow-sm" />
+                                        <label asp-for="Product.Size" class="form-label fw-bold">Kích cỡ</label>
+                                        <input asp-for="Product.Size" class="form-control shadow-sm" />
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label asp-for="Color" class="form-label fw-bold">Màu sắc</label>
-                                        <input asp-for="Color" class="form-control shadow-sm" />
+                                        <label asp-for="Product.Color" class="form-label fw-bold">Màu sắc</label>
+                                        <input asp-for="Product.Color" class="form-control shadow-sm" />
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label asp-for="Description" class="form-label fw-bold">Mô tả</label>
-                                    <textarea asp-for="Description" class="form-control shadow-sm" rows="4"></textarea>
+                                    <label asp-for="Product.Description" class="form-label fw-bold">Mô tả</label>
+                                    <textarea asp-for="Product.Description" class="form-control shadow-sm" rows="4"></textarea>
                                 </div>
                             </div>
 
@@ -59,9 +59,9 @@
                                 <div class="mb-3 text-center">
                                     <p class="small text-muted mb-1">Ảnh hiện tại:</p>
                                     <div class="d-flex flex-wrap gap-2 justify-content-center" id="currentImagesContainer">
-                                        @if (Model.Images != null && Model.Images.Any())
+                                        @if (Model.Product.Images != null && Model.Product.Images.Any())
                                         {
-                                            foreach (var img in Model.Images)
+                                            foreach (var img in Model.Product.Images)
                                             {
                                                 <div class="position-relative d-inline-block" id="imageContainer-@img.Id">
                                                     <img src="~/images/@img.Url" class="img-thumbnail shadow-sm" style="height: 100px; object-fit: cover;" />
@@ -73,7 +73,7 @@
                                         }
                                         else
                                         {
-                                            <img src="~/images/@Model.ImageUrl" class="img-thumbnail shadow-sm" style="height: 100px; object-fit: cover;" />
+                                            <img src="~/images/@Model.Product.ImageUrl" class="img-thumbnail shadow-sm" style="height: 100px; object-fit: cover;" />
                                         }
                                     </div>
                                 </div>

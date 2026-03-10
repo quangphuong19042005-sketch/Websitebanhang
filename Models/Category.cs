@@ -9,6 +9,9 @@ namespace WebsiteBanHang.Models
         [Required, StringLength(50)]
         public string Name { get; set; }
 
+        [StringLength(50)]
+        public string? FolderName { get; set; }
+
         public ICollection<Product> Products {get; set;} = new List<Product>();
     }
 }

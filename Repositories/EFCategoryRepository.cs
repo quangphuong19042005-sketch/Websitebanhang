@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WebsiteBanHang.Data;
 using WebsiteBanHang.Models;
 
@@ -12,9 +13,14 @@ namespace WebsiteBanHang.Repositories
             _context = context;
         }
 
-        public IEnumerable<Category> GetAllCategories()
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
-            return _context.Categories.ToList();
+            return await _context.Categories.ToListAsync();
+        }
+
+        public async Task<Category?> GetByIdAsync(int id)
+        {
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
         }
     }
 }

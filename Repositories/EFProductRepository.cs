@@ -13,50 +13,101 @@ namespace WebsiteBanHang.Repositories
             _context = context;
         }
 
-        public IEnumerable<Product> GetAll()
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return _context.Products.Include(p => p.Category).Include(p => p.Images).ToList();
+            return await _context.Products.Include(p => p.Category).Include(p => p.Images).ToListAsync();
         }
 
-        public Product GetById(int id)
+        public async Task<IEnumerable<Product>> GetFilteredAsync(int? categoryId, decimal? minPrice, decimal? maxPrice, string? size, string? color, string? sortOrder)
         {
-            return _context.Products.Include(p => p.Category).Include(p => p.Images).FirstOrDefault(p => p.Id == id);
+            var query = _context.Products.Include(p => p.Category).Include(p => p.Images).AsQueryable();
+
+            if (categoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+            }
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            if (!string.IsNullOrEmpty(size))
+            {
+                query = query.Where(p => p.Size != null && p.Size.Contains(size));
+            }
+
+            if (!string.IsNullOrEmpty(color))
+            {
+                query = query.Where(p => p.Color != null && p.Color.Contains(color));
+            }
+
+            switch (sortOrder)
+            {
+                case "price_asc":
+                    query = query.OrderBy(p => p.Price);
+                    break;
+                case "price_desc":
+                    query = query.OrderByDescending(p => p.Price);
+                    break;
+                case "name_asc":
+                    query = query.OrderBy(p => p.Name);
+                    break;
+                case "name_desc":
+                    query = query.OrderByDescending(p => p.Name);
+                    break;
+                default:
+                    query = query.OrderByDescending(p => p.Id); // Mặc định hiển thị mới nhất
+                    break;
+            }
+
+            return await query.ToListAsync();
         }
 
-        public void Add(Product product)
+        public async Task<Product?> GetByIdAsync(int id)
+        {
+            return await _context.Products.Include(p => p.Category).Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task AddAsync(Product product)
         {
             _context.Products.Add(product);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(Product product)
+        public async Task UpdateAsync(Product product)
         {
             _context.Products.Update(product);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
                 _context.Products.Remove(product);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 
-        public ProductImage GetImageById(int imageId)
+        public async Task<ProductImage?> GetImageByIdAsync(int imageId)
         {
-            return _context.ProductImages.FirstOrDefault(i => i.Id == imageId);
+            return await _context.ProductImages.FirstOrDefaultAsync(i => i.Id == imageId);
         }
 
-        public void DeleteImage(int imageId)
+        public async Task DeleteImageAsync(int imageId)
         {
-            var image = _context.ProductImages.Find(imageId);
+            var image = await _context.ProductImages.FindAsync(imageId);
             if (image != null)
             {
                 _context.ProductImages.Remove(image);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
     }

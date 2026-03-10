@@ -4,12 +4,13 @@ namespace WebsiteBanHang.Repositories
 {
     public interface IProductRepository
     {
-        IEnumerable<Product> GetAll();
-        Product GetById(int id);
-        void Add(Product product);
-        void Update(Product product);
-        void Delete(int id);
-        ProductImage GetImageById(int imageId);
-        void DeleteImage(int imageId);
+        Task<IEnumerable<Product>> GetAllAsync();
+        Task<IEnumerable<Product>> GetFilteredAsync(int? categoryId, decimal? minPrice, decimal? maxPrice, string? size, string? color, string? sortOrder);
+        Task<Product?> GetByIdAsync(int id);
+        Task AddAsync(Product product);
+        Task UpdateAsync(Product product);
+        Task DeleteAsync(int id);
+        Task<ProductImage?> GetImageByIdAsync(int imageId);
+        Task DeleteImageAsync(int imageId);
     }
 }

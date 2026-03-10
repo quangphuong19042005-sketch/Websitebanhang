@@ -1,0 +1,184 @@
+@model WebsiteBanHang.ViewModels.CatalogViewModel
+
+@{
+    ViewData["Title"] = "Tất cả sản phẩm";
+}
+
+<div class="py-5 bg-white">
+    <div class="container">
+        <div class="row mb-4 border-bottom pb-3">
+            <div class="col-12 d-flex justify-content-between align-items-end">
+                <div>
+                    <h2 class="fw-bold mb-2">🛍️ Bộ Sưu Tập Sản Phẩm</h2>
+                    <p class="text-muted mb-0">Khám phá toàn bộ danh mục thời trang mới nhất của chúng tôi.</p>
+                </div>
+                
+                <!-- Toggle button for mobile filters -->
+                <button class="btn btn-outline-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar" aria-controls="filterSidebar">
+                    <i class="fas fa-filter me-2"></i> Lọc
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar: Filters (Desktop) / Offcanvas (Mobile) -->
+            <div class="col-lg-3">
+                <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="filterSidebar" aria-labelledby="filterSidebarLabel">
+                    <div class="offcanvas-header border-bottom">
+                        <h5 class="offcanvas-title fw-bold" id="filterSidebarLabel">
+                            <i class="fas fa-filter text-primary me-2"></i>Bộ Lọc
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#filterSidebar" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <form asp-controller="Home" asp-action="Products" method="get" class="w-100">
+                            
+                            <!-- Category Filter -->
+                            <div class="mb-4">
+                                <label class="fw-bold mb-2 text-dark">Danh Mục</label>
+                                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select shadow-sm border-0 bg-light">
+                                    <option value="">-- Tất cả danh mục --</option>
+                                </select>
+                            </div>
+
+                            <!-- Price Filter -->
+                            <div class="mb-4">
+                                <label class="fw-bold mb-2 text-dark">Khoảng Giá (VNĐ)</label>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <input asp-for="MinPrice" type="number" class="form-control form-control-sm shadow-sm border-0 bg-light" placeholder="Từ" />
+                                    </div>
+                                    <div class="col-6">
+                                        <input asp-for="MaxPrice" type="number" class="form-control form-control-sm shadow-sm border-0 bg-light" placeholder="Đến" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Size Filter -->
+                            <div class="mb-4">
+                                <label class="fw-bold mb-2 text-dark">Kích Cỡ</label>
+                                <select asp-for="Size" class="form-select shadow-sm border-0 bg-light">
+                                    <option value="">-- Tất cả size --</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
+                                </select>
+                            </div>
+
+                            <!-- Color Filter -->
+                            <div class="mb-4">
+                                <label class="fw-bold mb-2 text-dark">Màu Sắc</label>
+                                <input asp-for="Color" class="form-control shadow-sm border-0 bg-light" placeholder="Ví dụ: Đen, Trắng..." />
+                            </div>
+
+                            <!-- Sort Order -->
+                            <div class="mb-4">
+                                <label class="fw-bold mb-2 text-dark">Sắp Xếp</label>
+                                <select asp-for="SortOrder" class="form-select shadow-sm border-0 bg-light">
+                                    <option value="">-- Mặc định --</option>
+                                    <option value="price_asc">Giá: Thấp đến Cao</option>
+                                    <option value="price_desc">Giá: Cao đến Thấp</option>
+                                    <option value="name_asc">Tên: A-Z</option>
+                                    <option value="name_desc">Tên: Z-A</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm rounded-pill mb-2">APPLY FILTERS</button>
+                            <a asp-action="Products" class="btn btn-outline-secondary w-100 fw-bold rounded-pill">XÓA BỘ LỌC</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="col-lg-9">
+                @if (!Model.Products.Any())
+                {
+                    <div class="text-center py-5 bg-light rounded-4 shadow-sm">
+                        <i class="fas fa-search text-muted mb-3" style="font-size: 3rem;"></i>
+                        <h4 class="text-muted">Không tìm thấy sản phẩm phù hợp.</h4>
+                        <p class="text-secondary">Vui lòng thử thay đổi các tùy chọn lọc bên cạnh.</p>
+                        <a asp-action="Products" class="btn btn-outline-primary rounded-pill mt-3">Xem tất cả sản phẩm</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Hiển thị <span class="fw-bold text-dark">@Model.Products.Count()</span> kết quả.</span>
+                    </div>
+
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        @foreach (var item in Model.Products)
+                        {
+                            <div class="col">
+                                <div class="card h-100 border-0 shadow-sm product-card">
+                                    <div class="position-relative overflow-hidden rounded-top" style="background-color: #f8f9fa;">
+                                        <img src="~/images/@(string.IsNullOrEmpty(item.ImageUrl) ? "default-product.png" : item.ImageUrl)" 
+                                             class="card-img-top hover-scale" 
+                                             alt="@item.Name" 
+                                             style="height: 250px; object-fit: cover;">
+                                        
+                                        <div class="product-overlay d-flex align-items-center justify-content-center">
+                                            <a asp-controller="Product" asp-action="Display" asp-route-id="@item.Id" 
+                                               class="btn btn-light fw-bold shadow-sm px-4 rounded-pill">XEM CHI TIẾT</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body text-center p-3">
+                                        <h6 class="card-title fw-bold text-dark mb-1 text-truncate">@item.Name</h6>
+                                        <div class="d-flex justify-content-center gap-2 mb-2">
+                                            @if (!string.IsNullOrEmpty(item.Size))
+                                            {
+                                                <span class="badge bg-light text-secondary border" style="font-size: 0.7rem;">@item.Size</span>
+                                            }
+                                            @if (!string.IsNullOrEmpty(item.Color))
+                                            {
+                                                <span class="badge bg-light text-secondary border" style="font-size: 0.7rem;">@item.Color</span>
+                                            }
+                                        </div>
+                                        <p class="card-text text-danger fw-bold fs-5 mb-0">@item.Price.ToString("#,##0") đ</p>
+                                    </div>
+                                    
+                                    <div class="card-footer bg-white border-0 pt-0 pb-3">
+                                        <button class="btn btn-outline-dark w-100 fw-bold rounded-pill text-uppercase" style="font-size: 0.85rem; letter-spacing: 0.5px;">Thêm vào giỏ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .product-card {
+        transition: transform 0.3s ease, shadow 0.3s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.2);
+        opacity: 0;
+        transition: 0.3s;
+    }
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+    .hover-scale {
+        transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .product-card:hover img.hover-scale {
+        transform: scale(1.1);
+    }
+</style>
