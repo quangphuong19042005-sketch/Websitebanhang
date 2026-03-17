@@ -81,7 +81,7 @@
                     <div class="d-flex gap-2 flex-wrap">
                         @if (User.IsInRole("Admin"))
                         {
-                            <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning btn-lg px-4 shadow-sm">
+                            <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning btn-lg px-4 shadow-sm">
                                 <i class="fas fa-edit me-2"></i> Chỉnh sửa
                             </a>
                         }
