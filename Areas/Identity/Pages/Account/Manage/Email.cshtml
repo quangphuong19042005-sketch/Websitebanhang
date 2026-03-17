@@ -1,0 +1,111 @@
+@page
+@model EmailModel
+@{
+    ViewData["Title"] = "Quản lý Email";
+    ViewData["ActivePage"] = ManageNavPages.Email;
+}
+
+<div class="row justify-content-center py-4">
+    <div class="col-lg-9">
+        <!-- Header -->
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 16px; overflow: hidden;">
+            <div class="px-4 py-4" style="background: linear-gradient(135deg, #1e1e2d 0%, #2d2d3f 100%);">
+                <div class="d-flex align-items-center">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
+                         style="width: 56px; height: 56px; background: rgba(255,255,255,0.1);">
+                        <i class="fas fa-user-circle text-white" style="font-size: 1.8rem;"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold text-white mb-0">Quản lý tài khoản</h4>
+                        <p class="text-white-50 mb-0 small">Cập nhật thông tin cá nhân của bạn</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                    <div class="card-body p-2">
+                        <partial name="_ManageNav" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="col-md-9">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-1"><i class="fas fa-envelope me-2 text-primary"></i>Email</h5>
+                        <p class="text-muted small mb-4">Quản lý địa chỉ email của bạn</p>
+
+                        <partial name="_StatusMessage" for="StatusMessage" />
+
+                        <form id="email-form" method="post">
+                            <div asp-validation-summary="All" class="alert alert-danger small py-2" role="alert"></div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold small text-muted">EMAIL HIỆN TẠI</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+                                    <input asp-for="Email" class="form-control border-start-0 bg-light" disabled />
+                                    @if (Model.IsEmailConfirmed)
+                                    {
+                                        <span class="input-group-text bg-light border-start-0 text-success"><i class="fas fa-check-circle"></i></span>
+                                    }
+                                </div>
+                                @if (Model.IsEmailConfirmed)
+                                {
+                                    <small class="text-success"><i class="fas fa-check me-1"></i>Email đã được xác nhận</small>
+                                }
+                                else
+                                {
+                                    <small class="text-warning"><i class="fas fa-exclamation-triangle me-1"></i>Email chưa xác nhận</small>
+                                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link btn-sm p-0 ms-2">Gửi lại email xác nhận</button>
+                                }
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="Input.NewEmail" class="form-label fw-semibold small text-muted">EMAIL MỚI</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope-open text-muted"></i></span>
+                                    <input asp-for="Input.NewEmail" class="form-control border-start-0" autocomplete="email" placeholder="Nhập email mới" />
+                                </div>
+                                <span asp-validation-for="Input.NewEmail" class="text-danger small"></span>
+                            </div>
+
+                            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary w-100 fw-bold py-2" style="border-radius: 10px;">
+                                <i class="fas fa-save me-2"></i>Đổi email
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #manage-nav .nav-link {
+        color: #555;
+        border-radius: 8px;
+        padding: 10px 16px;
+        margin-bottom: 2px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    #manage-nav .nav-link:hover {
+        background: #f0f2f5;
+        color: #1e1e2d;
+    }
+    #manage-nav .nav-link.active {
+        background: linear-gradient(135deg, #1e1e2d, #2d2d3f);
+        color: #fff !important;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

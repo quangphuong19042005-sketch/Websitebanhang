@@ -1,0 +1,16 @@
+@using WebsiteBanHang.Areas.Identity.Pages.Account.Manage
+
+<nav class="nav flex-column" id="manage-nav">
+    <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)"
+       asp-page="./Index">
+        <i class="fas fa-user me-2"></i> Hồ sơ
+    </a>
+    <a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)"
+       asp-page="./Email">
+        <i class="fas fa-envelope me-2"></i> Email
+    </a>
+    <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)"
+       asp-page="./ChangePassword">
+        <i class="fas fa-lock me-2"></i> Mật khẩu
+    </a>
+</nav>

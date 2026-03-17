@@ -11,8 +11,15 @@
     
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebsiteBanHang.styles.css" asp-append-version="true" />
+    
+    <!-- Dark Mode Script (Must be in head to avoid FOUC) -->
+    <script src="~/js/darkmode.js"></script>
 
     <style>
+        html.theme-transition, html.theme-transition *, html.theme-transition *:before, html.theme-transition *:after {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+            transition-delay: 0s !important;
+        }
         @@media (min-width: 992px) {
             .dropdown:hover .dropdown-menu {
                 display: block;
@@ -28,9 +35,9 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     <header class="sticky-top shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+        <nav class="navbar navbar-expand-lg bg-body py-3">
             <div class="container">
-                <a class="navbar-brand fw-bold fs-3 text-uppercase" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand fw-bold fs-3 text-uppercase" asp-area="" asp-controller="Home" asp-action="Index">
                     <span class="text-warning">Fashion</span> Store
                 </a>
                 
@@ -41,38 +48,38 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link fw-semibold px-3 text-dark" asp-controller="Home" asp-action="Index">TRANG CHỦ</a>
+                            <a class="nav-link fw-semibold px-3" asp-area="" asp-controller="Home" asp-action="Index">TRANG CHỦ</a>
                         </li>
                         
                         <li class="nav-item">
-                            <a class="nav-link fw-semibold px-3 text-dark" asp-controller="Home" asp-action="Products">SẢN PHẨM</a>
+                            <a class="nav-link fw-semibold px-3" asp-area="" asp-controller="Home" asp-action="Products">SẢN PHẨM</a>
                         </li>
 
+                        @if (User.IsInRole("Admin"))
+                        {
                         <li class="nav-item dropdown">
-                            <a class="nav-link fw-semibold px-3 text-dark dropdown-toggle" 
+                            <a class="nav-link fw-semibold px-3 dropdown-toggle" 
                                id="navbarDropdown" role="button">
                                 QUẢN TRỊ
                             </a>
                             <ul class="dropdown-menu border-0 shadow">
-                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">📦 Quản lý kho hàng</a></li>
-                                <li><a class="dropdown-item" asp-controller="Category" asp-action="Index">📂 Quản lý danh mục</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Add">➕ Thêm sản phẩm</a></li>
+                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">📊 Dashboard Admin</a></li>
+                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">📦 Quản lý kho hàng</a></li>
+                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Order" asp-action="Index">🛒 Quản lý đơn hàng</a></li>
                             </ul>
                         </li>
+                        }
 
                         <li class="nav-item">
-                            <a class="nav-link fw-semibold px-3 text-dark" asp-controller="Home" asp-action="Privacy">CHÍNH SÁCH</a>
+                            <a class="nav-link fw-semibold px-3" asp-area="" asp-controller="Home" asp-action="Privacy">CHÍNH SÁCH</a>
                         </li>
                     </ul>
                     
                     <div class="d-flex align-items-center">
-                        <a href="#" class="text-dark me-3"><i class="fa-solid fa-magnifying-glass fs-5"></i></a>
-                        <a href="#" class="text-dark position-relative me-3">
-                            <i class="fa-solid fa-cart-shopping fs-5"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-                        </a>
-                        <a href="#" class="btn btn-outline-dark btn-sm fw-bold">ĐĂNG NHẬP</a>
+                        <button id="theme-toggle" class="btn btn-link text-decoration-none me-3 p-0" title="Đổi chế độ">
+                            <i id="theme-icon" class="fas fa-moon fs-5"></i>
+                        </button>
+                        <partial name="_LoginPartial" />
                     </div>
                 </div>
             </div>

@@ -1,0 +1,112 @@
+@model WebsiteBanHang.ViewModels.ProductFormViewModel
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm";
+}
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold text-dark mb-1">Thêm sản phẩm mới</h4>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">Điền thông tin để thêm sản phẩm vào kho</p>
+    </div>
+    <a asp-action="Index" class="btn btn-light d-flex align-items-center gap-2 px-3" style="border-radius: 8px;">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+<form asp-action="Add" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger small py-2" role="alert"></div>
+
+    <div class="row g-4">
+        <!-- Left Column: Product Info -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-info-circle text-primary me-2"></i>Thông tin sản phẩm</h6>
+
+                    <div class="mb-3">
+                        <label asp-for="Product.Name" class="form-label fw-semibold small text-muted">TÊN SẢN PHẨM</label>
+                        <input asp-for="Product.Name" class="form-control" placeholder="Nhập tên sản phẩm" />
+                        <span asp-validation-for="Product.Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Product.Price" class="form-label fw-semibold small text-muted">GIÁ BÁN (₫)</label>
+                            <input asp-for="Product.Price" class="form-control" placeholder="100,000" />
+                            <span asp-validation-for="Product.Price" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Product.CategoryId" class="form-label fw-semibold small text-muted">DANH MỤC</label>
+                            <select asp-for="Product.CategoryId" asp-items="@Model.Categories" class="form-select">
+                                <option value="">-- Chọn danh mục --</option>
+                            </select>
+                            <span asp-validation-for="Product.CategoryId" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Product.Size" class="form-label fw-semibold small text-muted">KÍCH CỠ</label>
+                            <input asp-for="Product.Size" class="form-control" placeholder="S, M, L, XL" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Product.Color" class="form-label fw-semibold small text-muted">MÀU SẮC</label>
+                            <input asp-for="Product.Color" class="form-control" placeholder="Đen, Trắng, Xanh" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Product.Description" class="form-label fw-semibold small text-muted">MÔ TẢ</label>
+                        <textarea asp-for="Product.Description" class="form-control" rows="4" placeholder="Mô tả chi tiết sản phẩm..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Image Upload -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-images text-primary me-2"></i>Hình ảnh</h6>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted">CHỌN HÌNH ẢNH</label>
+                        <input type="file" name="ImageFiles" class="form-control" multiple accept="image/*" />
+                        <small class="text-muted">Chọn nhiều ảnh (tối đa 5MB/ảnh). Ảnh đầu tiên sẽ làm ảnh chính.</small>
+                    </div>
+
+                    <div id="image-preview" class="row g-2 mt-2"></div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="card border-0 shadow-sm mt-4" style="border-radius: 12px;">
+                <div class="card-body p-4">
+                    <button type="submit" class="btn btn-primary w-100 fw-bold py-2" style="border-radius: 10px;">
+                        <i class="fas fa-plus me-2"></i>Thêm sản phẩm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    document.querySelector('input[name="ImageFiles"]').addEventListener('change', function (e) {
+        const preview = document.getElementById('image-preview');
+        preview.innerHTML = '';
+        [...e.target.files].forEach((file, i) => {
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                preview.innerHTML += `<div class="col-6"><img src="${ev.target.result}" class="img-fluid rounded" style="height:80px; width:100%; object-fit:cover; border: 2px solid ${i === 0 ? '#3699ff' : '#eee'};" /></div>`;
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

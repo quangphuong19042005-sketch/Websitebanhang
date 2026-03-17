@@ -1,0 +1,161 @@
+@using Microsoft.AspNetCore.Identity
+@using WebsiteBanHang.Models
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row g-4 mb-4">
+    <!-- Stats Cards -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card stat-card shadow-sm">
+            <div class="card-body d-flex align-items-center gap-3 p-4">
+                <div class="stat-icon" style="background: rgba(54,153,255,0.1); color: #3699ff;">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div>
+                    <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Sản phẩm</div>
+                    <div class="fs-4 fw-bold text-dark">@ViewBag.ProductCount</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card stat-card shadow-sm">
+            <div class="card-body d-flex align-items-center gap-3 p-4">
+                <div class="stat-icon" style="background: rgba(29,201,183,0.1); color: #1dc9b7;">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div>
+                    <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Đơn hàng</div>
+                    <div class="fs-4 fw-bold text-dark">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card stat-card shadow-sm">
+            <div class="card-body d-flex align-items-center gap-3 p-4">
+                <div class="stat-icon" style="background: rgba(253,57,122,0.1); color: #fd397a;">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div>
+                    <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Người dùng</div>
+                    <div class="fs-4 fw-bold text-dark">@ViewBag.UserCount</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card stat-card shadow-sm">
+            <div class="card-body d-flex align-items-center gap-3 p-4">
+                <div class="stat-icon" style="background: rgba(255,184,34,0.1); color: #ffb822;">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div>
+                    <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Danh mục</div>
+                    <div class="fs-4 fw-bold text-dark">@ViewBag.CategoryCount</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+            <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                <h5 class="fw-bold mb-0"><i class="fas fa-bolt text-warning me-2"></i>Thao tác nhanh</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Add"
+                           class="d-flex align-items-center gap-3 p-3 rounded-3 text-decoration-none"
+                           style="background: #f1faff; transition: all 0.2s;"
+                           onmouseover="this.style.background='#d6f0ff'" onmouseout="this.style.background='#f1faff'">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                 style="width:42px; height:42px; background:#3699ff; color:#fff; flex-shrink:0;">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Thêm sản phẩm</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Tạo sản phẩm mới</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Index"
+                           class="d-flex align-items-center gap-3 p-3 rounded-3 text-decoration-none"
+                           style="background: #fff8ea; transition: all 0.2s;"
+                           onmouseover="this.style.background='#ffefcc'" onmouseout="this.style.background='#fff8ea'">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                 style="width:42px; height:42px; background:#ffb822; color:#fff; flex-shrink:0;">
+                                <i class="fas fa-list"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Kho hàng</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Quản lý sản phẩm</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a asp-area="Admin" asp-controller="Order" asp-action="Index"
+                           class="d-flex align-items-center gap-3 p-3 rounded-3 text-decoration-none"
+                           style="background: #fff2f8; transition: all 0.2s;"
+                           onmouseover="this.style.background='#ffe0ee'" onmouseout="this.style.background='#fff2f8'">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                 style="width:42px; height:42px; background:#fd397a; color:#fff; flex-shrink:0;">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">Đơn hàng</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Theo dõi đơn hàng</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 12px;">
+            <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                <h5 class="fw-bold mb-0"><i class="fas fa-info-circle text-primary me-2"></i>Thông tin</h5>
+            </div>
+            <div class="card-body p-4">
+                <ul class="list-unstyled mb-0">
+                    <li class="d-flex align-items-center gap-2 mb-3 pb-3 border-bottom">
+                        <i class="fas fa-user-shield text-primary"></i>
+                        <span class="text-muted">Đăng nhập:</span>
+                        <span class="fw-bold text-dark ms-auto" style="font-size: 0.85rem;">@User.Identity?.Name</span>
+                    </li>
+                    <li class="d-flex align-items-center gap-2 mb-3 pb-3 border-bottom">
+                        <i class="fas fa-shield-alt text-success"></i>
+                        <span class="text-muted">Vai trò:</span>
+                        <span class="badge bg-success ms-auto">Admin</span>
+                    </li>
+                    <li class="d-flex align-items-center gap-2">
+                        <i class="fas fa-server text-warning"></i>
+                        <span class="text-muted">Hệ thống:</span>
+                        <span class="badge bg-success ms-auto">Online</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity Placeholder -->
+<div class="card border-0 shadow-sm" style="border-radius: 12px;">
+    <div class="card-header bg-white border-bottom-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0"><i class="fas fa-clock text-muted me-2"></i>Hoạt động gần đây</h5>
+    </div>
+    <div class="card-body text-center py-5">
+        <i class="fas fa-chart-line text-muted mb-3" style="font-size: 3rem; opacity: 0.3;"></i>
+        <p class="text-muted mb-0">Biểu đồ và lịch sử hoạt động sẽ hiển thị tại đây.</p>
+    </div>
+</div>

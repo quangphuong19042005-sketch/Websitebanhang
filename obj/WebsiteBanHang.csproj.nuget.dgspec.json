@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\wwwwwww\\Websitebanhang\\WebsiteBanHang.csproj": {}
+    "C:\\www\\Websitebanhang\\WebsiteBanHang.csproj": {}
   },
   "projects": {
-    "C:\\wwwwwww\\Websitebanhang\\WebsiteBanHang.csproj": {
+    "C:\\www\\Websitebanhang\\WebsiteBanHang.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\wwwwwww\\Websitebanhang\\WebsiteBanHang.csproj",
+        "projectUniqueName": "C:\\www\\Websitebanhang\\WebsiteBanHang.csproj",
         "projectName": "WebsiteBanHang",
-        "projectPath": "C:\\wwwwwww\\Websitebanhang\\WebsiteBanHang.csproj",
+        "projectPath": "C:\\www\\Websitebanhang\\WebsiteBanHang.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\wwwwwww\\Websitebanhang\\obj\\",
+        "outputPath": "C:\\www\\Websitebanhang\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,20 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[8.0.2, )"
@@ -47,6 +61,10 @@
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[8.0.2, )"
             }

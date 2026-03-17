@@ -78,12 +78,18 @@
                         </p>
                     </div>
 
-                    <div class="d-flex gap-2">
-                        <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning btn-lg px-4 shadow-sm">
-                            <i class="fas fa-edit me-2"></i> Chỉnh sửa
-                        </a>
-                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">
-                            <i class="fas fa-arrow-left me-2"></i> Quay lại
+                    <div class="d-flex gap-2 flex-wrap">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning btn-lg px-4 shadow-sm">
+                                <i class="fas fa-edit me-2"></i> Chỉnh sửa
+                            </a>
+                        }
+                        <button class="btn btn-dark btn-lg px-4 shadow-sm">
+                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ
+                        </button>
+                        <a asp-controller="Home" asp-action="Products" class="btn btn-outline-secondary btn-lg px-4">
+                            <i class="fas fa-arrow-left me-2"></i> Tiếp tục mua sắm
                         </a>
                     </div>
                     

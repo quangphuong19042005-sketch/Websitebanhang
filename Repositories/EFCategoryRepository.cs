@@ -37,12 +37,14 @@ namespace WebsiteBanHang.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
-            }
+            var category = await _context.Categories
+                .Include(c => c.Products)
+                .FirstOrDefaultAsync(c => c.Id == id);
+            if (category == null) return;
+            if (category.Products.Any())
+                throw new InvalidOperationException("Không thể xóa danh mục đang chứa sản phẩm. Hãy xóa hoặc chuyển sản phẩm trước.");
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,0 +1,58 @@
+@model WebsiteBanHang.Models.Product
+
+@{
+    ViewData["Title"] = "Xóa sản phẩm";
+}
+
+<div class="row justify-content-center py-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+            <!-- Header -->
+            <div class="px-4 py-3" style="background: linear-gradient(135deg, #fd397a, #ff6b6b);">
+                <h5 class="fw-bold text-white mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Xác nhận xóa sản phẩm
+                </h5>
+            </div>
+
+            <div class="card-body p-4">
+                <!-- Product Info -->
+                <div class="d-flex align-items-center gap-3 mb-4 p-3 rounded" style="background: #f7f8fa;">
+                    <div style="width: 64px; height: 64px; border-radius: 10px; overflow: hidden; flex-shrink: 0; background: #eee;">
+                        <img src="~/images/@(string.IsNullOrEmpty(Model.ImageUrl) ? "default-product.png" : Model.ImageUrl)"
+                             alt="@Model.Name"
+                             style="width: 100%; height: 100%; object-fit: cover;" />
+                    </div>
+                    <div>
+                        <div class="fw-bold text-dark">@Model.Name</div>
+                        <div class="text-muted small">
+                            <span class="me-3"><i class="fas fa-tag me-1"></i>@Model.Price.ToString("#,##0") ₫</span>
+                            @if (!string.IsNullOrEmpty(Model.Size))
+                            {
+                                <span class="me-3"><i class="fas fa-ruler me-1"></i>@Model.Size</span>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.Color))
+                            {
+                                <span><i class="fas fa-palette me-1"></i>@Model.Color</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning small py-2 mb-4" style="border-radius: 8px;">
+                    <i class="fas fa-info-circle me-1"></i> Hành động này <strong>không thể hoàn tác</strong>. Sản phẩm và ảnh liên quan sẽ bị xóa vĩnh viễn.
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a asp-action="Index" class="btn btn-light flex-fill py-2" style="border-radius: 10px;">
+                        <i class="fas fa-arrow-left me-1"></i> Hủy bỏ
+                    </a>
+                    <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post" class="flex-fill">
+                        <button type="submit" class="btn btn-danger w-100 fw-bold py-2" style="border-radius: 10px;">
+                            <i class="fas fa-trash-alt me-1"></i> Xóa sản phẩm
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,7 +9,7 @@ namespace WebsiteBanHang.Models // Đổi namespace theo tên dự án của b�
 
         [Required(ErrorMessage = "Vui lòng nhập tên sản phẩm")]
         [Display(Name = "Tên quần áo")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [Range(1000, 10000000)]
         [Display(Name = "Giá bán")]
@@ -22,10 +22,10 @@ namespace WebsiteBanHang.Models // Đổi namespace theo tên dự án của b�
 
         // --- PHẦN THÊM MỚI CHO QUẦN ÁO ---
         [Display(Name = "Kích cỡ (S, M, L)")]
-        public string Size { get; set; } // Ví dụ: S, M, L, XL
+        public string? Size { get; set; } // Ví dụ: S, M, L, XL
 
         [Display(Name = "Màu sắc")]
-        public string Color { get; set; } // Ví dụ: Xanh, Đỏ, Trắng
+        public string? Color { get; set; } // Ví dụ: Xanh, Đỏ, Trắng
         [ValidateNever]
         public string? ImageUrl { get; set; } // Chứa tên file ảnh
 

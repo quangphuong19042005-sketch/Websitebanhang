@@ -39,7 +39,7 @@ namespace WebsiteBanHang.Repositories
 
             if (!string.IsNullOrEmpty(size))
             {
-                query = query.Where(p => p.Size != null && p.Size.Contains(size));
+                query = query.Where(p => p.Size == size);
             }
 
             if (!string.IsNullOrEmpty(color))
@@ -88,9 +88,15 @@ namespace WebsiteBanHang.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.Id == id);
             if (product != null)
             {
+                if (product.Images != null && product.Images.Any())
+                {
+                    _context.ProductImages.RemoveRange(product.Images);
+                }
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
             }

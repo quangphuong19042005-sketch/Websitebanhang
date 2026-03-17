@@ -2,8 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using WebsiteBanHang.Models;
 using WebsiteBanHang.Repositories;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace WebsiteBanHang.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
@@ -13,7 +16,7 @@ namespace WebsiteBanHang.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        // 1. Hiển thị danh sách danh mục
+        // 1. Hiển thị danh sách danh mục (chỉ admin)
         public async Task<IActionResult> Index()
         {
             var categories = await _categoryRepository.GetAllCategoriesAsync();
@@ -28,6 +31,7 @@ namespace WebsiteBanHang.Controllers
 
         // 3. Thêm danh mục mới (POST)
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(Category category)
         {
             if (ModelState.IsValid)
@@ -52,6 +56,7 @@ namespace WebsiteBanHang.Controllers
 
         // 5. Cập nhật danh mục (POST)
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(Category category)
         {
             if (ModelState.IsValid)
@@ -65,10 +70,18 @@ namespace WebsiteBanHang.Controllers
 
         // 6. Xóa danh mục (POST)
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _categoryRepository.DeleteAsync(id);
-            TempData["Success"] = "Xóa danh mục thành công!";
+            try
+            {
+                await _categoryRepository.DeleteAsync(id);
+                TempData["Success"] = "Xóa danh mục thành công!";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
             return RedirectToAction("Index");
         }
     }

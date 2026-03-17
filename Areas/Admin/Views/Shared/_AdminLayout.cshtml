@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Panel</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --sidebar-bg: #1e1e2d;
+            --sidebar-header: #1a1a27;
+            --sidebar-hover: #2d2d3f;
+            --sidebar-active: #3699ff;
+            --sidebar-text: #9899ac;
+            --sidebar-text-active: #ffffff;
+            --topbar-height: 60px;
+            --body-bg: #f5f8fa;
+        }
+
+        * { font-family: 'Inter', sans-serif; }
+        body { background-color: var(--body-bg); margin: 0; overflow-x: hidden; }
+
+        /* ===== SIDEBAR ===== */
+        .admin-sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            z-index: 1050;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--sidebar-hover) transparent;
+        }
+        .sidebar-brand {
+            height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            background: var(--sidebar-header);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .sidebar-brand h4 {
+            color: #fff;
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+        .sidebar-brand .brand-icon {
+            width: 36px; height: 36px;
+            background: var(--sidebar-active);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 12px;
+            font-size: 1.1rem; color: #fff;
+        }
+        .sidebar-menu { padding: 16px 12px; }
+        .sidebar-label {
+            color: var(--sidebar-text);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 8px 16px 8px;
+            margin-top: 12px;
+        }
+        .sidebar-item {
+            display: flex; align-items: center;
+            padding: 10px 16px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 2px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar-item:hover {
+            background: var(--sidebar-hover);
+            color: var(--sidebar-text-active);
+        }
+        .sidebar-item.active {
+            background: rgba(54, 153, 255, 0.12);
+            color: var(--sidebar-active);
+        }
+        .sidebar-item i {
+            width: 20px; text-align: center;
+            margin-right: 12px; font-size: 1rem;
+        }
+        .sidebar-item .badge {
+            margin-left: auto;
+            font-size: 0.7rem;
+        }
+
+        /* ===== TOPBAR ===== */
+        .admin-topbar {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            height: var(--topbar-height);
+            background: #fff;
+            border-bottom: 1px solid #ebedf3;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1040;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 12px; }
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+        .topbar-breadcrumb {
+            font-size: 0.85rem;
+            color: #7e8299;
+        }
+        .topbar-breadcrumb .page-title {
+            color: #181c32;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .topbar-user {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.85rem;
+            color: #3f4254;
+            font-weight: 500;
+        }
+        .topbar-user .user-avatar {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #3699ff 0%, #0073e6 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: 700; font-size: 0.85rem;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .admin-content {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--topbar-height);
+            padding: 24px;
+            min-height: calc(100vh - var(--topbar-height));
+        }
+
+        /* ===== SIDEBAR TOGGLE (MOBILE) ===== */
+        .sidebar-toggle {
+            display: none;
+            background: none; border: none;
+            font-size: 1.2rem; color: #3f4254;
+            cursor: pointer;
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 1045;
+        }
+
+        @@media (max-width: 991.98px) {
+            .admin-sidebar { transform: translateX(-100%); }
+            .admin-sidebar.show { transform: translateX(0); }
+            .sidebar-overlay.show { display: block; }
+            .sidebar-toggle { display: block; }
+            .admin-topbar { left: 0; }
+            .admin-content { margin-left: 0; }
+        }
+
+        /* ===== CARDS ===== */
+        .stat-card {
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        .stat-icon {
+            width: 48px; height: 48px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Overlay (Mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon"><i class="fas fa-store"></i></div>
+            <h4>Fashion Admin</h4>
+        </div>
+        <div class="sidebar-menu">
+            <div class="sidebar-label">TỔNG QUAN</div>
+            <a class="sidebar-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")"
+               asp-area="Admin" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+
+            <div class="sidebar-label">QUẢN LÝ</div>
+            <a class="sidebar-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active" : "")"
+               asp-area="Admin" asp-controller="Product" asp-action="Index">
+                <i class="fas fa-box"></i> Sản phẩm
+            </a>
+            <a class="sidebar-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Order" ? "active" : "")"
+               asp-area="Admin" asp-controller="Order" asp-action="Index">
+                <i class="fas fa-shopping-cart"></i> Đơn hàng
+                <span class="badge bg-danger rounded-pill">Mới</span>
+            </a>
+            <a class="sidebar-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
+               asp-area="Admin" asp-controller="Category" asp-action="Index">
+                <i class="fas fa-tags"></i> Danh mục
+            </a>
+
+            <div class="sidebar-label">HỆ THỐNG</div>
+            <a class="sidebar-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")"
+               asp-area="Admin" asp-controller="User" asp-action="Index">
+                <i class="fas fa-users"></i> Người dùng
+            </a>
+            <a class="sidebar-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")"
+               asp-area="Admin" asp-controller="Settings" asp-action="Index">
+                <i class="fas fa-cog"></i> Cài đặt
+            </a>
+
+            <div class="sidebar-label" style="margin-top: 30px;"></div>
+            <a class="sidebar-item" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-arrow-left"></i> Về trang chủ
+            </a>
+            <a class="sidebar-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            </a>
+        </div>
+    </aside>
+
+    <!-- Topbar -->
+    <header class="admin-topbar">
+        <div class="topbar-left">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="topbar-breadcrumb">
+                <span class="page-title">@ViewData["Title"]</span>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <partial name="_LoginPartial" />
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+        @RenderBody()
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('adminSidebar').classList.toggle('show');
+            document.getElementById('sidebarOverlay').classList.toggle('show');
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,147 @@
+@model WebsiteBanHang.ViewModels.ProductFormViewModel
+
+@{
+    ViewData["Title"] = "Cập nhật sản phẩm";
+}
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold text-dark mb-1">Cập nhật sản phẩm</h4>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">Chỉnh sửa thông tin sản phẩm <span class="fw-bold text-primary">@Model.Product.Name</span></p>
+    </div>
+    <a asp-action="Index" class="btn btn-light d-flex align-items-center gap-2 px-3" style="border-radius: 8px;">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+<form asp-action="Update" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Product.Id" />
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger small py-2" role="alert"></div>
+
+    <div class="row g-4">
+        <!-- Left Column: Product Info -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-edit text-warning me-2"></i>Thông tin sản phẩm</h6>
+
+                    <div class="mb-3">
+                        <label asp-for="Product.Name" class="form-label fw-semibold small text-muted">TÊN SẢN PHẨM</label>
+                        <input asp-for="Product.Name" class="form-control" placeholder="Nhập tên sản phẩm" />
+                        <span asp-validation-for="Product.Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Product.Price" class="form-label fw-semibold small text-muted">GIÁ BÁN (₫)</label>
+                            <input asp-for="Product.Price" class="form-control" placeholder="100,000" />
+                            <span asp-validation-for="Product.Price" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Product.CategoryId" class="form-label fw-semibold small text-muted">DANH MỤC</label>
+                            <select asp-for="Product.CategoryId" asp-items="@Model.Categories" class="form-select">
+                                <option value="">-- Chọn danh mục --</option>
+                            </select>
+                            <span asp-validation-for="Product.CategoryId" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Product.Size" class="form-label fw-semibold small text-muted">KÍCH CỠ</label>
+                            <input asp-for="Product.Size" class="form-control" placeholder="S, M, L, XL" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Product.Color" class="form-label fw-semibold small text-muted">MÀU SẮC</label>
+                            <input asp-for="Product.Color" class="form-control" placeholder="Đen, Trắng, Xanh" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Product.Description" class="form-label fw-semibold small text-muted">MÔ TẢ</label>
+                        <textarea asp-for="Product.Description" class="form-control" rows="4" placeholder="Mô tả chi tiết sản phẩm..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Image -->
+        <div class="col-lg-4">
+            <!-- Current Images -->
+            @if (Model.Product.Images != null && Model.Product.Images.Any())
+            {
+                <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
+                    <div class="card-body p-4">
+                        <h6 class="fw-bold mb-3"><i class="fas fa-images text-primary me-2"></i>Ảnh hiện tại</h6>
+                        <div class="row g-2">
+                            @foreach (var img in Model.Product.Images)
+                            {
+                                <div class="col-6 position-relative" id="img-@img.Id">
+                                    <img src="~/images/@img.Url" class="img-fluid rounded" style="height: 80px; width: 100%; object-fit: cover; border: 2px solid @(img.Url == Model.Product.ImageUrl ? "#3699ff" : "#eee");" />
+                                    <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 rounded-circle delete-img-btn"
+                                            style="width: 22px; height: 22px; padding: 0; font-size: 0.6rem; line-height: 1;"
+                                            data-image-id="@img.Id">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Upload New -->
+            <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-upload text-success me-2"></i>Thêm ảnh mới</h6>
+                    <input type="file" name="ImageFiles" class="form-control" multiple accept="image/*" />
+                    <small class="text-muted">Chọn ảnh mới sẽ thay thế toàn bộ ảnh cũ</small>
+                    <div id="image-preview" class="row g-2 mt-2"></div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="card border-0 shadow-sm mt-4" style="border-radius: 12px;">
+                <div class="card-body p-4">
+                    <button type="submit" class="btn btn-warning w-100 fw-bold py-2 text-white" style="border-radius: 10px;">
+                        <i class="fas fa-save me-2"></i>Lưu thay đổi
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.querySelector('input[name="ImageFiles"]')?.addEventListener('change', function (e) {
+            const preview = document.getElementById('image-preview');
+            preview.innerHTML = '';
+            [...e.target.files].forEach((file, i) => {
+                const reader = new FileReader();
+                reader.onload = function (ev) {
+                    preview.innerHTML += `<div class="col-6"><img src="${ev.target.result}" class="img-fluid rounded" style="height:80px; width:100%; object-fit:cover;" /></div>`;
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        document.querySelectorAll('.delete-img-btn').forEach(btn => {
+            btn.addEventListener('click', async function () {
+                const imageId = this.dataset.imageId;
+                if (!confirm('Xóa ảnh này?')) return;
+                const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+                const res = await fetch(`/Admin/Product/DeleteImage?imageId=${imageId}`, {
+                    method: 'POST',
+                    headers: { 'RequestVerificationToken': token || '' }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById(`img-${imageId}`)?.remove();
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,134 @@
+@model IEnumerable<WebsiteBanHang.Models.Category>
+
+@{
+    ViewData["Title"] = "Quản lý danh mục";
+}
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold text-dark mb-1">Quản lý danh mục</h4>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">Hiện có <span class="fw-bold text-primary">@Model.Count()</span> danh mục</p>
+    </div>
+    <a asp-action="Add" class="btn btn-primary d-flex align-items-center gap-2 px-4 shadow-sm" style="border-radius: 8px;">
+        <i class="fas fa-plus"></i> Thêm danh mục
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm py-2 mb-3" role="alert" style="border-radius: 8px;">
+        <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm py-2 mb-3" role="alert" style="border-radius: 8px;">
+        <i class="fas fa-exclamation-circle me-2"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead style="background: #f7f8fa;">
+                <tr>
+                    <th class="ps-4 py-3 text-muted fw-semibold" style="font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase; width: 80px;">ID</th>
+                    <th class="py-3 text-muted fw-semibold" style="font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Tên danh mục</th>
+                    <th class="py-3 text-muted fw-semibold" style="font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Thư mục ảnh</th>
+                    <th class="py-3 text-muted fw-semibold text-end pe-4" style="font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5">
+                            <i class="fas fa-folder-open text-muted mb-2" style="font-size: 2.5rem; opacity: 0.3;"></i>
+                            <p class="text-muted mb-0">Chưa có danh mục nào.</p>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr style="border-bottom: 1px solid #f1f1f4;">
+                            <td class="ps-4 py-3">
+                                <span class="text-muted fw-semibold">#@item.Id</span>
+                            </td>
+                            <td class="py-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="d-flex align-items-center justify-content-center"
+                                         style="width: 36px; height: 36px; border-radius: 8px; background: rgba(54,153,255,0.1); flex-shrink: 0;">
+                                        <i class="fas fa-folder text-primary" style="font-size: 0.85rem;"></i>
+                                    </div>
+                                    <span class="fw-semibold text-dark">@item.Name</span>
+                                </div>
+                            </td>
+                            <td class="py-3">
+                                <code class="px-2 py-1 rounded" style="background: #f5f8fa; color: #3699ff; font-size: 0.82rem;">@item.FolderName</code>
+                            </td>
+                            <td class="text-end pe-4 py-3">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <a asp-action="Update" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-light d-flex align-items-center justify-content-center"
+                                       style="width:34px; height:34px; border-radius:8px;"
+                                       title="Sửa">
+                                        <i class="fas fa-pen text-warning" style="font-size: 0.8rem;"></i>
+                                    </a>
+                                    <button type="button"
+                                            class="btn btn-sm btn-light d-flex align-items-center justify-content-center"
+                                            style="width:34px; height:34px; border-radius:8px;"
+                                            title="Xóa"
+                                            onclick="confirmDelete(@item.Id, '@item.Name')">
+                                        <i class="fas fa-trash-alt text-danger" style="font-size: 0.8rem;"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (Model.Any())
+    {
+        <div class="card-footer bg-white border-top-0 px-4 py-3">
+            <span class="text-muted" style="font-size: 0.82rem;">Tổng: <span class="fw-bold text-dark">@Model.Count()</span> danh mục</span>
+        </div>
+    }
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+            <div class="modal-body text-center p-4">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+                     style="width: 56px; height: 56px; background: rgba(253,57,122,0.1);">
+                    <i class="fas fa-trash-alt text-danger" style="font-size: 1.3rem;"></i>
+                </div>
+                <h6 class="fw-bold mb-2">Xóa danh mục?</h6>
+                <p class="text-muted small mb-3">Bạn có chắc muốn xóa <span id="categoryName" class="fw-bold text-dark"></span>?</p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <button type="button" class="btn btn-light px-3" style="border-radius: 8px;" data-bs-dismiss="modal">Hủy</button>
+                    <form id="deleteForm" method="post" asp-action="Delete">
+                        <input type="hidden" name="id" id="categoryId" />
+                        <button type="submit" class="btn btn-danger px-3" style="border-radius: 8px;">Xóa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(id, name) {
+        document.getElementById('categoryId').value = id;
+        document.getElementById('categoryName').innerText = name;
+        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+    }
+</script>

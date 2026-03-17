@@ -1,0 +1,82 @@
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+}
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold text-dark mb-1">Quản lý đơn hàng</h4>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">Theo dõi và xử lý đơn hàng của khách hàng</p>
+    </div>
+</div>
+
+<!-- Stats Row -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm" style="border-radius: 10px; border-left: 4px solid #ffb822 !important;">
+            <div class="card-body p-3 d-flex align-items-center gap-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px; background: rgba(255,184,34,0.1); flex-shrink:0;">
+                    <i class="fas fa-clock text-warning"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Chờ xử lý</div>
+                    <div class="fw-bold fs-5 text-dark">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm" style="border-radius: 10px; border-left: 4px solid #3699ff !important;">
+            <div class="card-body p-3 d-flex align-items-center gap-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px; background: rgba(54,153,255,0.1); flex-shrink:0;">
+                    <i class="fas fa-truck text-primary"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Đang giao</div>
+                    <div class="fw-bold fs-5 text-dark">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm" style="border-radius: 10px; border-left: 4px solid #1dc9b7 !important;">
+            <div class="card-body p-3 d-flex align-items-center gap-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px; background: rgba(29,201,183,0.1); flex-shrink:0;">
+                    <i class="fas fa-check-circle text-success"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Hoàn thành</div>
+                    <div class="fw-bold fs-5 text-dark">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm" style="border-radius: 10px; border-left: 4px solid #fd397a !important;">
+            <div class="card-body p-3 d-flex align-items-center gap-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px; background: rgba(253,57,122,0.1); flex-shrink:0;">
+                    <i class="fas fa-times-circle text-danger"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">Đã hủy</div>
+                    <div class="fw-bold fs-5 text-dark">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Empty State -->
+<div class="card border-0 shadow-sm" style="border-radius: 12px;">
+    <div class="card-body text-center py-5">
+        <div class="mb-3">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background: #f5f8fa;">
+                <i class="fas fa-shopping-bag text-muted" style="font-size: 2rem; opacity: 0.5;"></i>
+            </div>
+        </div>
+        <h5 class="fw-bold text-dark mb-2">Chưa có đơn hàng nào</h5>
+        <p class="text-muted mb-0" style="max-width: 400px; margin: 0 auto;">
+            Khi khách hàng đặt hàng, đơn hàng sẽ xuất hiện tại đây để bạn quản lý.
+        </p>
+    </div>
+</div>

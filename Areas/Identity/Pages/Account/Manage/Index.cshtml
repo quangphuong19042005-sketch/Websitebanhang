@@ -1,0 +1,107 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<div class="row justify-content-center py-4">
+    <div class="col-lg-9">
+        <!-- Header -->
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 16px; overflow: hidden;">
+            <div class="px-4 py-4" style="background: linear-gradient(135deg, #1e1e2d 0%, #2d2d3f 100%);">
+                <div class="d-flex align-items-center">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
+                         style="width: 56px; height: 56px; background: rgba(255,255,255,0.1);">
+                        <i class="fas fa-user-circle text-white" style="font-size: 1.8rem;"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold text-white mb-0">Quản lý tài khoản</h4>
+                        <p class="text-white-50 mb-0 small">Cập nhật thông tin cá nhân của bạn</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                    <div class="card-body p-2">
+                        <partial name="_ManageNav" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="col-md-9">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-1"><i class="fas fa-user-edit me-2 text-primary"></i>Hồ sơ</h5>
+                        <p class="text-muted small mb-4">Cập nhật thông tin hồ sơ của bạn</p>
+
+                        <partial name="_StatusMessage" for="StatusMessage" />
+
+                        <form id="profile-form" method="post">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger small py-2" role="alert"></div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold small text-muted">TÊN ĐĂNG NHẬP</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-at text-muted"></i></span>
+                                    <input asp-for="Username" class="form-control border-start-0 bg-light" disabled />
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Input.FullName" class="form-label fw-semibold small text-muted">HỌ VÀ TÊN</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-user text-muted"></i></span>
+                                    <input asp-for="Input.FullName" class="form-control border-start-0" placeholder="Nhập họ và tên" />
+                                </div>
+                                <span asp-validation-for="Input.FullName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="Input.PhoneNumber" class="form-label fw-semibold small text-muted">SỐ ĐIỆN THOẠI</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-phone text-muted"></i></span>
+                                    <input asp-for="Input.PhoneNumber" class="form-control border-start-0" placeholder="0xx xxx xxxx" />
+                                </div>
+                                <span asp-validation-for="Input.PhoneNumber" class="text-danger small"></span>
+                            </div>
+
+                            <button id="update-profile-button" type="submit" class="btn btn-primary w-100 fw-bold py-2" style="border-radius: 10px;">
+                                <i class="fas fa-save me-2"></i>Lưu thay đổi
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #manage-nav .nav-link {
+        color: #555;
+        border-radius: 8px;
+        padding: 10px 16px;
+        margin-bottom: 2px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    #manage-nav .nav-link:hover {
+        background: #f0f2f5;
+        color: #1e1e2d;
+    }
+    #manage-nav .nav-link.active {
+        background: linear-gradient(135deg, #1e1e2d, #2d2d3f);
+        color: #fff !important;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
