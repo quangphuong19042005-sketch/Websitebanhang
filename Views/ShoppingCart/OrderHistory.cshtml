@@ -1,0 +1,224 @@
+@model IEnumerable<WebsiteBanHang.Models.Order>
+
+@{
+    ViewData["Title"] = "Lịch sử mua hàng";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5 mt-3">
+        <div>
+            <h2 class="fw-bold mb-1">📋 Lịch sử mua hàng</h2>
+            <p class="text-muted mb-0">Theo dõi và quản lý các đơn hàng bạn đã đặt.</p>
+        </div>
+        <a asp-controller="Home" asp-action="Products" class="btn btn-outline-dark rounded-pill px-4 fw-bold">TIẾP TỤC MUA SẮM</a>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="text-center py-5 bg-light rounded-4 shadow-sm border">
+            <div class="display-1 text-muted mb-4">🛍️</div>
+            <h4 class="fw-bold">Bạn chưa có đơn hàng nào</h4>
+            <p class="text-secondary mb-4">Mời bạn khám phá hàng ngàn sản phẩm thời trang mới nhất của chúng tôi!</p>
+            <a asp-controller="Home" asp-action="Products" class="btn btn-warning btn-lg px-5 rounded-pill fw-bold shadow">MUA SẮM NGAY</a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var order in Model.OrderByDescending(o => o.OrderDate))
+            {
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden order-card h-100">
+                        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-light p-2 rounded-3 text-primary">
+                                    <i class="fas fa-receipt fw-bold"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small text-uppercase fw-bold">Mã đơn hàng</span>
+                                    <h5 class="mb-0 fw-bold">#@order.Id</h5>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center gap-4 flex-wrap">
+                                <div class="text-md-end">
+                                    <span class="text-muted small text-uppercase">Ngày đặt</span>
+                                    <p class="mb-0 fw-medium">@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+                                </div>
+                                <div class="text-md-end">
+                                    <span class="text-muted small text-uppercase">Tổng tiền</span>
+                                    <p class="mb-0 fw-bold text-danger fs-5">@order.TotalPrice.ToString("#,##0") đ</p>
+                                </div>
+                                <div>
+                                    @switch (order.Status)
+                                    {
+                                        case "Pending":
+                                            <span class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-pill border border-secondary border-opacity-25">
+                                                <i class="fas fa-clock me-1"></i> Đang chờ duyệt
+                                            </span>
+                                            break;
+                                        case "Processing":
+                                            <span class="badge bg-info-subtle text-info px-3 py-2 rounded-pill border border-info border-opacity-25">
+                                                <i class="fas fa-sync fa-spin me-1"></i> Đang xử lý
+                                            </span>
+                                            break;
+                                        case "Shipped":
+                                            <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill border border-primary border-opacity-25">
+                                                <i class="fas fa-truck me-1"></i> Đang giao hàng
+                                            </span>
+                                            break;
+                                        case "Completed":
+                                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill border border-success border-opacity-25">
+                                                <i class="fas fa-check-circle me-1"></i> Hoàn thành
+                                            </span>
+                                            break;
+                                        case "Cancelled":
+                                            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill border border-danger border-opacity-25">
+                                                <i class="fas fa-times-circle me-1"></i> Đã hủy
+                                            </span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-dark px-3 py-2 rounded-pill">@order.Status</span>
+                                            break;
+                                    }
+                                </div>
+                                <button class="btn btn-light rounded-circle shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#order-@order.Id">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="collapse" id="order-@order.Id">
+                            <div class="card-body bg-light-subtle p-4">
+                                <div class="row g-4 mt-2">
+                                    <div class="col-12">
+                                        <h6 class="fw-bold mb-3 border-start border-4 border-success ps-2 text-uppercase" style="font-size: 0.85rem;">Chi tiết sản phẩm đã mua</h6>
+                                        <div class="table-responsive bg-white rounded shadow-sm border">
+                                            <table class="table table-hover align-middle mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="ps-3" style="width: 80px;">Hình ảnh</th>
+                                                        <th>Sản phẩm</th>
+                                                        <th class="text-center">Số lượng</th>
+                                                        <th class="text-end pe-3">Đơn giá</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var detail in order.OrderDetails)
+                                                    {
+                                                        <tr>
+                                                            <td class="ps-3">
+                                                                <img src="@(string.IsNullOrEmpty(detail.Product?.ImageUrl) ? "/images/default-product.png" : (detail.Product.ImageUrl.StartsWith("http") ? detail.Product.ImageUrl : "/images/" + detail.Product.ImageUrl))" 
+                                                                     alt="@detail.Product?.Name" 
+                                                                     class="rounded" 
+                                                                     style="width: 50px; height: 50px; object-fit: cover; border: 1px solid #eee;">
+                                                            </td>
+                                                            <td>
+                                                                <p class="fw-bold mb-0 text-dark">@detail.Product?.Name</p>
+                                                                <span class="text-muted small">Mã SP: #@detail.ProductId</span>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <span class="badge bg-light text-dark border">x @detail.Quantity</span>
+                                                            </td>
+                                                            <td class="text-end pe-3 fw-bold text-danger">
+                                                                @detail.Price.ToString("#,##0") đ
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-4 mt-3">
+                                    <div class="col-md-6 border-end border-opacity-10">
+                                        <h6 class="fw-bold mb-3 border-start border-4 border-warning ps-2">THÔNG TIN GIAO HÀNG</h6>
+                                        <div class="mb-2">
+                                            <span class="text-muted small">Người nhận:</span>
+                                            <p class="fw-medium mb-0">@order.FullName</p>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="text-muted small">Số điện thoại:</span>
+                                            <p class="fw-medium mb-0">@order.PhoneNumber</p>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="text-muted small">Địa chỉ:</span>
+                                            <p class="fw-medium mb-0 text-secondary">@order.Address</p>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(order.Notes))
+                                        {
+                                            <div class="mt-3 p-2 bg-white rounded border-start border-3 border-info">
+                                                <span class="text-muted small d-block">Ghi chú:</span>
+                                                <p class="small mb-0 italic">@order.Notes</p>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="fw-bold mb-3 border-start border-4 border-primary ps-2">LỊCH TRÌNH ĐƠN HÀNG</h6>
+                                        <ul class="list-unstyled mb-0 position-relative ps-4 order-timeline">
+                                            <li class="mb-3 position-relative">
+                                                <div class="timeline-dot bg-success"></div>
+                                                <span class="fw-bold small d-block">Đặt hàng thành công</span>
+                                                <span class="text-muted x-small">@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</span>
+                                            </li>
+                                            <li class="mb-0 position-relative">
+                                                <div class="timeline-dot bg-secondary opacity-50"></div>
+                                                <span class="text-muted small">Đang xử lý các bước tiếp theo...</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .order-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .order-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08) !important;
+    }
+    
+    .x-small {
+        font-size: 0.75rem;
+    }
+    
+    /* Timeline styles */
+    .order-timeline::before {
+        content: '';
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        bottom: 5px;
+        width: 2px;
+        background: #dee2e6;
+        z-index: 0;
+    }
+    .timeline-dot {
+        position: absolute;
+        left: -33px;
+        top: 3px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        z-index: 1;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+    }
+
+    /* Collapse icon animation */
+    [data-bs-toggle="collapse"][aria-expanded="true"] i {
+        transform: rotate(180deg);
+    }
+    .btn i {
+        transition: transform 0.3s ease;
+    }
+</style>

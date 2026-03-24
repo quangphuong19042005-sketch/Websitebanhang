@@ -1,3 +1,9 @@
+@using WebsiteBanHang.Repositories
+@inject ISettingRepository SettingRepo
+@{
+    var settings = await SettingRepo.GetAllSettingsAsync();
+    var storeName = settings.GetValueOrDefault("StoreName", "Fashion Store");
+}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -196,7 +202,7 @@
     <aside class="admin-sidebar" id="adminSidebar">
         <div class="sidebar-brand">
             <div class="brand-icon"><i class="fas fa-store"></i></div>
-            <h4>Fashion Admin</h4>
+            <h4>@storeName Admin</h4>
         </div>
         <div class="sidebar-menu">
             <div class="sidebar-label">TỔNG QUAN</div>

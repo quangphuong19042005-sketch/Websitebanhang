@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+
+<div class="container mt-5 text-center">
+    <div class="card shadow-sm p-5 border-success">
+        <div class="mb-4">
+            <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+        </div>
+        <h2 class="text-success mb-3">Cảm ơn bạn đã đặt hàng!</h2>
+        <p class="lead">Đơn hàng của bạn mang mã số: <strong>#@ViewBag.OrderId</strong> đã được ghi nhận.</p>
+        <p class="text-muted">Chúng tôi sẽ liên hệ với bạn sớm nhất để xác nhận đơn hàng.</p>
+        <hr class="my-4">
+        <div class="mt-4">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg mr-2">Quay lại trang chủ</a>
+            <a asp-action="OrderHistory" class="btn btn-outline-info btn-lg">Xem lịch sử mua hàng</a>
+        </div>
+    </div>
+</div>

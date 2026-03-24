@@ -1,0 +1,159 @@
+@model WebsiteBanHang.Models.Order
+
+@{
+    ViewData["Title"] = "Chi tiết Đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Header & Actions -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <a asp-action="Index" class="btn btn-sm btn-light border" style="border-radius: 8px;">
+                <i class="fas fa-arrow-left text-muted"></i>
+            </a>
+            <h4 class="fw-bold text-dark mb-0">Chi tiết đơn hàng #@Model.Id</h4>
+        </div>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">Ngày đặt: <span class="fw-semibold">@Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</span></p>
+    </div>
+    <div>
+        @switch (Model.Status)
+        {
+            case "Pending":
+                <span class="badge rounded-pill fs-6" style="background: #f5f5f5; color: #5e6278; font-weight: 600; padding: 8px 16px;">Chờ duyệt</span>
+                break;
+            case "Processing":
+                <span class="badge rounded-pill fs-6" style="background: #fff4e5; color: #ffa800; font-weight: 600; padding: 8px 16px;">Đang xử lý</span>
+                break;
+            case "Shipped":
+                <span class="badge rounded-pill fs-6" style="background: #e1f0ff; color: #3699ff; font-weight: 600; padding: 8px 16px;">Đang giao</span>
+                break;
+            case "Completed":
+                <span class="badge rounded-pill fs-6" style="background: #e8fff3; color: #50cd89; font-weight: 600; padding: 8px 16px;">Hoàn thành</span>
+                break;
+            case "Cancelled":
+                <span class="badge rounded-pill fs-6" style="background: #fff5f8; color: #f1416c; font-weight: 600; padding: 8px 16px;">Đã hủy</span>
+                break;
+        }
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success border-0 shadow-sm d-flex align-items-center gap-3 mb-4" style="border-radius: 12px; background: #e8fff3; color: #27ae60;">
+        <i class="fas fa-check-circle fs-4"></i>
+        <div class="fw-semibold">@TempData["Success"]</div>
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row g-4">
+    <!-- Customer Info -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
+            <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                <h5 class="fw-bold text-dark mb-0">Khách hàng</h5>
+            </div>
+            <div class="card-body px-4 pb-4">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div style="width: 48px; height: 48px; border-radius: 10px; background: #f1faff; color: #3699ff; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold text-dark">@Model.FullName</div>
+                        <div class="text-muted small">@Model.PhoneNumber</div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="text-muted small text-uppercase fw-bold mb-1">Địa chỉ giao hàng</label>
+                    <div class="text-dark fw-medium">@Model.Address</div>
+                </div>
+                
+                <div class="mb-0">
+                    <label class="text-muted small text-uppercase fw-bold mb-1">Ghi chú</label>
+                    <div class="text-dark italic text-muted" style="font-size: 0.9rem;">
+                        @(string.IsNullOrEmpty(Model.Notes) ? "Không có ghi chú từ khách hàng" : Model.Notes)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Status Update -->
+        <div class="card border-0 shadow-sm" style="border-radius: 12px; background: #f8f9fa;">
+            <div class="card-body p-4">
+                <h5 class="fw-bold text-dark mb-3">Trạng thái đơn hàng</h5>
+                <form asp-action="UpdateStatus" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <select name="status" class="form-select border-0 shadow-sm" style="border-radius: 8px; padding: 10px 15px;">
+                            <option value="Pending" selected="@(Model.Status == "Pending")">Chờ duyệt</option>
+                            <option value="Processing" selected="@(Model.Status == "Processing")">Đang xử lý</option>
+                            <option value="Shipped" selected="@(Model.Status == "Shipped")">Đang giao hàng</option>
+                            <option value="Completed" selected="@(Model.Status == "Completed")">Đã hoàn thành</option>
+                            <option value="Cancelled" selected="@(Model.Status == "Cancelled")">Đã hủy</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm" style="border-radius: 8px; padding: 10px;">
+                        CẬP NHẬT TRẠNG THÁI
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+            <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                <h5 class="fw-bold text-dark mb-0">Sản phẩm</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead style="background: #f7f8fa;">
+                            <tr>
+                                <th class="ps-4 py-3 text-muted fw-semibold" style="font-size: 0.78rem; text-transform: uppercase;">Sản phẩm</th>
+                                <th class="py-3 text-muted fw-semibold" style="font-size: 0.78rem; text-transform: uppercase;">Số lượng</th>
+                                <th class="py-3 text-muted fw-semibold" style="font-size: 0.78rem; text-transform: uppercase;">Giá</th>
+                                <th class="py-3 text-muted fw-semibold text-end pe-4" style="font-size: 0.78rem; text-transform: uppercase;">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detail in Model.OrderDetails)
+                            {
+                                <tr style="border-bottom: 1px solid #f1f1f4;">
+                                    <td class="ps-4 py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div style="width: 40px; height: 40px; border-radius: 6px; overflow: hidden; background: #f5f5f5;">
+                                                <img src="~/images/@(string.IsNullOrEmpty(detail.Product.ImageUrl) ? "default-product.png" : detail.Product.ImageUrl)" 
+                                                     style="width: 100%; height: 100%; object-fit: cover;" />
+                                            </div>
+                                            <div class="fw-semibold text-dark">@detail.Product.Name</div>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 text-dark">@detail.Quantity</td>
+                                    <td class="py-3">
+                                        <span class="text-dark fw-medium">@detail.Price.ToString("#,##0")</span>
+                                        <span class="text-muted small">₫</span>
+                                    </td>
+                                    <td class="py-3 text-end pe-4 fw-bold text-dark">
+                                        @((detail.Price * detail.Quantity).ToString("#,##0")) <span class="text-muted small fw-normal">₫</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot class="border-top-0">
+                            <tr style="background: #fcfdfe;">
+                                <td colspan="3" class="text-end py-4 fw-bold text-dark" style="font-size: 1.1rem;">Tổng cộng thanh toán:</td>
+                                <td class="text-end pe-4 py-4 fw-bold text-primary" style="font-size: 1.25rem;">
+                                    @Model.TotalPrice.ToString("#,##0") ₫
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

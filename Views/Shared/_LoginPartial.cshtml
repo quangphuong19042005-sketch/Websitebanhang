@@ -9,13 +9,64 @@
 {
     var currentUser = await UserManager.GetUserAsync(User);
     var displayName = !string.IsNullOrWhiteSpace(currentUser?.FullName) ? currentUser.FullName : currentUser?.Email;
-    <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @displayName!</a>
-    </li>
-    <li class="nav-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
-        </form>
+    
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 py-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <span class="fw-semibold text-dark">Hello, @displayName!</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end border-0 shadow mt-2" style="min-width: 250px;">
+            <li>
+                <div class="px-3 py-3 border-bottom mb-2 bg-light-subtle rounded-top-2">
+                    <p class="small text-muted mb-0 uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 1px;">Tài khoản của bạn</p>
+                    <p class="fw-bold mb-0 text-truncate">@currentUser?.Email</p>
+                </div>
+            </li>
+            
+            @if (User.IsInRole("Admin"))
+            {
+                <li><h6 class="dropdown-header text-uppercase text-primary fw-bold" style="font-size: 0.7rem;">Quản trị hệ thống</h6></li>
+                <li>
+                    <a class="dropdown-item py-2" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                        <i class="fas fa-chart-line me-2 text-primary opacity-75"></i> Dashboard Admin
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item py-2" asp-area="Admin" asp-controller="Product" asp-action="Index">
+                        <i class="fas fa-boxes-stacked me-2 text-primary opacity-75"></i> Quản lý kho hàng
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item py-2" asp-area="Admin" asp-controller="Order" asp-action="Index">
+                        <i class="fas fa-shopping-cart me-2 text-primary opacity-75"></i> Quản lý đơn hàng
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+            }
+
+            <li><h6 class="dropdown-header text-uppercase text-secondary fw-bold" style="font-size: 0.7rem;">Cá nhân</h6></li>
+            <li>
+                <a class="dropdown-item py-2" asp-area="" asp-controller="ShoppingCart" asp-action="OrderHistory">
+                    <i class="fas fa-history me-2 text-info opacity-75"></i> Lịch sử mua hàng
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item py-2" asp-area="Identity" asp-page="/Account/Manage/Index">
+                    <i class="fas fa-user-cog me-2 text-secondary opacity-75"></i> Cài đặt tài khoản
+                </a>
+            </li>
+            
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button id="logout" type="submit" class="dropdown-item py-2 text-danger fw-bold">
+                        <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                    </button>
+                </form>
+            </li>
+        </ul>
     </li>
 }
 else

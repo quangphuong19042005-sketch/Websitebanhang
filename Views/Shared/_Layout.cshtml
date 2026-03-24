@@ -1,9 +1,17 @@
+@using WebsiteBanHang.Extensions
+@using WebsiteBanHang.Models
+@using WebsiteBanHang.Repositories
+@inject ISettingRepository SettingRepo
+@{
+    var settings = await SettingRepo.GetAllSettingsAsync();
+    var storeName = settings.GetValueOrDefault("StoreName", "Fashion Store");
+}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Fashion Store</title>
+    <title>@ViewData["Title"] - @storeName</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -11,6 +19,8 @@
     
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebsiteBanHang.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
     
     <!-- Dark Mode Script (Must be in head to avoid FOUC) -->
     <script src="~/js/darkmode.js"></script>
@@ -23,9 +33,36 @@
         @@media (min-width: 992px) {
             .dropdown:hover .dropdown-menu {
                 display: block;
-                margin-top: 0;
+                margin-top: 0 !important;
                 animation: fadeIn 0.3s;
             }
+            .dropdown-menu::before {
+                content: "";
+                position: absolute;
+                top: -15px;
+                left: 0;
+                width: 100%;
+                height: 15px;
+                background: transparent;
+            }
+        }
+        .mini-cart {
+            display: none;
+            transition: all 0.3s ease;
+            z-index: 1050;
+        }
+        .cart-dropdown:hover .mini-cart {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        .mini-cart-item:hover {
+            background-color: #f8f9fa;
+        }
+        .transition {
+            transition: all 0.2s ease;
+        }
+        .hover-bg-light:hover {
+            background-color: #f8f9fa;
         }
         @@keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -38,7 +75,15 @@
         <nav class="navbar navbar-expand-lg bg-body py-3">
             <div class="container">
                 <a class="navbar-brand fw-bold fs-3 text-uppercase" asp-area="" asp-controller="Home" asp-action="Index">
-                    <span class="text-warning">Fashion</span> Store
+                    @if (storeName.Contains(" "))
+                    {
+                        var parts = storeName.Split(' ', 2);
+                        <span class="text-warning">@parts[0]</span> @parts[1]
+                    }
+                    else
+                    {
+                        <span class="text-warning">@storeName</span>
+                    }
                 </a>
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -55,27 +100,80 @@
                             <a class="nav-link fw-semibold px-3" asp-area="" asp-controller="Home" asp-action="Products">SẢN PHẨM</a>
                         </li>
 
-                        @if (User.IsInRole("Admin"))
-                        {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link fw-semibold px-3 dropdown-toggle" 
-                               id="navbarDropdown" role="button">
-                                QUẢN TRỊ
-                            </a>
-                            <ul class="dropdown-menu border-0 shadow">
-                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">📊 Dashboard Admin</a></li>
-                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">📦 Quản lý kho hàng</a></li>
-                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Order" asp-action="Index">🛒 Quản lý đơn hàng</a></li>
-                            </ul>
-                        </li>
-                        }
+                        @* Quản trị moved to login dropdown for a cleaner UI *@
 
                         <li class="nav-item">
                             <a class="nav-link fw-semibold px-3" asp-area="" asp-controller="Home" asp-action="Privacy">CHÍNH SÁCH</a>
                         </li>
+
+@if (User.Identity.IsAuthenticated)
+                        {
+                            @* Lịch sử moved to login dropdown *@
+                        }
                     </ul>
                     
                     <div class="d-flex align-items-center">
+                        @{
+                            var cart = Context.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+                            var cartCount = cart.Sum(i => i.Quantity);
+                        }
+                        <div class="dropdown cart-dropdown">
+                            <a asp-area="" asp-controller="ShoppingCart" asp-action="Index" class="btn btn-link text-decoration-none me-3 p-0 position-relative" id="cartDropdownTrigger">
+                                <i class="fas fa-shopping-cart fs-5 text-dark"></i>
+                                <span id="cart-count-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem; @(cartCount > 0 ? "" : "display: none;")">@cartCount</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end shadow border-0 p-0 mini-cart" style="width: 400px;">
+                                <div class="px-3 py-2 bg-light border-bottom">
+                                    <h6 class="mb-0 small text-muted text-uppercase fw-bold">Sản phẩm mới thêm</h6>
+                                </div>
+                                <div id="mini-cart-container" class="overflow-auto" style="max-height: 350px;">
+                                    @if (cart.Any())
+                                    {
+                                        @foreach (var item in cart.Take(5))
+                                        {
+                                            <div class="d-flex align-items-center p-3 border-bottom mini-cart-item hover-bg-light transition">
+                                                <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/default-product.png" : (item.ImageUrl.StartsWith("http") ? item.ImageUrl : "/images/" + item.ImageUrl))" 
+                                                     alt="@item.Name" 
+                                                     class="rounded object-fit-cover me-3" 
+                                                     style="width: 45px; height: 45px; border: 1px solid #eee;">
+                                                <div class="flex-grow-1 min-w-0">
+                                                    <p class="mb-0 text-truncate fw-bold text-dark small">@item.Name</p>
+                                                    <span class="text-muted small">@item.Quantity x @item.Price.ToString("#,##0") đ</span>
+                                                </div>
+                                                <div class="text-end ms-2">
+                                                    <span class="text-danger fw-bold small">@((item.Price * item.Quantity).ToString("#,##0")) đ</span>
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (cart.Count() > 5)
+                                        {
+                                            <div class="p-2 text-center bg-light-subtle">
+                                                <span class="small text-muted">Và @(cart.Count() - 5) sản phẩm khác...</span>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="text-center py-5">
+                                            <div class="opacity-25 mb-3">
+                                                <i class="fas fa-shopping-basket fa-4x"></i>
+                                            </div>
+                                            <p class="text-muted mb-0">Giỏ hàng của bạn đang trống</p>
+                                        </div>
+                                    }
+                                </div>
+                                @if (cart.Any())
+                                {
+                                    <div class="p-3 bg-white d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="small text-muted mb-0 d-block">Tạm tính:</span>
+                                            <span class="fw-bold fs-5 text-danger" id="mini-cart-total">@cart.Sum(i => i.Price * i.Quantity).ToString("#,##0") đ</span>
+                                        </div>
+                                        <a asp-controller="ShoppingCart" asp-action="Index" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm btn-sm">XEM GIỎ HÀNG</a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
                         <button id="theme-toggle" class="btn btn-link text-decoration-none me-3 p-0" title="Đổi chế độ">
                             <i id="theme-icon" class="fas fa-moon fs-5"></i>
                         </button>
@@ -96,25 +194,26 @@
         <div class="container text-md-start">
             <div class="row">
                 <div class="col-md-4 col-lg-4 col-xl-3 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 fw-bold text-warning border-bottom border-warning pb-2 d-inline-block">Fashion Store</h5>
+                    <h5 class="text-uppercase mb-4 fw-bold text-warning border-bottom border-warning pb-2 d-inline-block">@storeName</h5>
                     <p class="small text-secondary">Nơi hội tụ những xu hướng mới nhất. Cam kết chất lượng cao.</p>
                 </div>
                 <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                     <h6 class="text-uppercase mb-4 fw-bold">Thông tin liên hệ</h6>
-                    <p><i class="fas fa-home me-2"></i> HUTECH KHU E1.0809</p>
-                    <p><i class="fas fa-envelope me-2"></i> support@fashion.com</p>
-                    <p><i class="fas fa-phone me-2"></i> +84 909 123 456</p>
+                    <p><i class="fas fa-home me-2"></i> @settings.GetValueOrDefault("StoreAddress", "HUTECH KHU E1.0809")</p>
+                    <p><i class="fas fa-envelope me-2"></i> @settings.GetValueOrDefault("StoreEmail", "support@fashion.com")</p>
+                    <p><i class="fas fa-phone me-2"></i> @settings.GetValueOrDefault("StorePhone", "+84 909 123 456")</p>
                 </div>
             </div>
             <hr class="mt-5 mb-4 border-secondary">
             <div class="text-center">
-                <p class="small text-secondary mb-0">Copyright © 2026 All rights reserved by: <strong class="text-warning">Fashion Store Team</strong></p>
+                <p class="small text-secondary mb-0">Copyright © 2026 All rights reserved by: <strong class="text-warning">@storeName Team</strong></p>
             </div>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

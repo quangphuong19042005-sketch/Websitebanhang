@@ -14,6 +14,17 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
+builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
+builder.Services.AddScoped<ISettingRepository, EFSettingRepository>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.MaxAge = TimeSpan.FromDays(7);
+});
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
@@ -68,6 +79,18 @@ using (var scope = app.Services.CreateScope())
         await userManager.UpdateAsync(adminUser);
     }
 }
+
+// --- SEED WEBSITE SETTINGS ---
+using (var scope = app.Services.CreateScope())
+{
+    var settingRepo = scope.ServiceProvider.GetRequiredService<ISettingRepository>();
+    var settings = await settingRepo.GetAllSettingsAsync();
+    
+    if (!settings.ContainsKey("StoreName")) await settingRepo.SetValueAsync("StoreName", "Fashion Store");
+    if (!settings.ContainsKey("StoreEmail")) await settingRepo.SetValueAsync("StoreEmail", "support@fashion.com");
+    if (!settings.ContainsKey("StorePhone")) await settingRepo.SetValueAsync("StorePhone", "+84 909 123 456");
+    if (!settings.ContainsKey("StoreAddress")) await settingRepo.SetValueAsync("StoreAddress", "HUTECH KHU E1.0809");
+}
 // ------------------------------
 
 if (!app.Environment.IsDevelopment())
@@ -83,6 +106,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "areas",

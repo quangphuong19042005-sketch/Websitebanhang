@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebsiteBanHang.Repositories;
 
 namespace WebsiteBanHang.Areas.Admin.Controllers
 {
@@ -7,16 +8,28 @@ namespace WebsiteBanHang.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class SettingsController : Controller
     {
-        private readonly IConfiguration _configuration;
+        private readonly ISettingRepository _settingRepository;
 
-        public SettingsController(IConfiguration configuration)
+        public SettingsController(ISettingRepository settingRepository)
         {
-            _configuration = configuration;
+            _settingRepository = settingRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var settings = await _settingRepository.GetAllSettingsAsync();
+            return View(settings);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(Dictionary<string, string> settings)
+        {
+            foreach (var setting in settings)
+            {
+                await _settingRepository.SetValueAsync(setting.Key, setting.Value);
+            }
+            TempData["Success"] = "Cài đặt đã được cập nhật thành công!";
+            return RedirectToAction("Index");
         }
     }
 }

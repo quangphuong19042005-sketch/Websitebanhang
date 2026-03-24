@@ -13,12 +13,28 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\www\\Websitebanhang\\wwwroot\\images\\default-product.png",
+      "PackagePath": "staticwebassets\\images\\default-product.png"
+    },
+    {
       "Id": "C:\\www\\Websitebanhang\\wwwroot\\images\\others\\314b51df-ebfa-4b06-8ee9-0c6c7c1a987f_images (1).jfif",
       "PackagePath": "staticwebassets\\images\\others\\314b51df-ebfa-4b06-8ee9-0c6c7c1a987f_images (1).jfif"
     },
     {
+      "Id": "C:\\www\\Websitebanhang\\wwwroot\\images\\others\\cf904704-1fa9-4f23-aeda-af136130772a.webp",
+      "PackagePath": "staticwebassets\\images\\others\\cf904704-1fa9-4f23-aeda-af136130772a.webp"
+    },
+    {
       "Id": "C:\\www\\Websitebanhang\\wwwroot\\images\\others\\da3e1e3c-a5df-4dc3-be0d-6155ce9d7d8f.jfif",
       "PackagePath": "staticwebassets\\images\\others\\da3e1e3c-a5df-4dc3-be0d-6155ce9d7d8f.jfif"
+    },
+    {
+      "Id": "C:\\www\\Websitebanhang\\wwwroot\\images\\others\\tho-bay-mau-chu-chim.webp",
+      "PackagePath": "staticwebassets\\images\\others\\tho-bay-mau-chu-chim.webp"
+    },
+    {
+      "Id": "C:\\www\\Websitebanhang\\wwwroot\\images\\others\\tho-bay-mau.webp",
+      "PackagePath": "staticwebassets\\images\\others\\tho-bay-mau.webp"
     },
     {
       "Id": "C:\\www\\Websitebanhang\\wwwroot\\js\\darkmode.js",

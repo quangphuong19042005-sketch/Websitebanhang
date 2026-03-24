@@ -1,74 +1,99 @@
+@model Dictionary<string, string>
 @{
     ViewData["Title"] = "Cài đặt hệ thống";
 }
 
 <!-- Header -->
-<div class="mb-4">
-    <h4 class="fw-bold text-dark mb-1">Cài đặt hệ thống</h4>
-    <p class="text-muted mb-0" style="font-size: 0.85rem;">Quản lý thông tin và cấu hình cửa hàng</p>
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <div>
+        <h4 class="fw-bold text-dark mb-1">Cài đặt hệ thống</h4>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">Quản lý thông tin và cấu hình cửa hàng</p>
+    </div>
 </div>
 
-<div class="row g-4">
-    <!-- Store Info -->
-    <div class="col-lg-6">
-        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
-            <div class="card-header bg-white border-0 pt-4 px-4">
-                <h6 class="fw-bold mb-0"><i class="fas fa-store text-primary me-2"></i>Thông tin cửa hàng</h6>
+@if (TempData["Success"] != null)
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: 'Thành công!',
+                text: '@TempData["Success"]',
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end'
+            });
+        });
+    </script>
+}
+
+<form asp-action="Update" method="post">
+    <div class="row g-4">
+        <!-- Store Info -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0"><i class="fas fa-store text-primary me-2"></i>Thông tin cửa hàng</h6>
+                    <button type="submit" class="btn btn-primary btn-sm rounded-pill px-3 fw-bold">
+                        <i class="fas fa-save me-1"></i> LƯU THAY ĐỔI
+                    </button>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted text-uppercase">Tên cửa hàng</label>
+                        <input type="text" name="settings[StoreName]" class="form-control" value="@(Model.ContainsKey("StoreName") ? Model["StoreName"] : "Fashion Store")" style="border-radius: 8px;" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted text-uppercase">Email liên hệ</label>
+                        <input type="email" name="settings[StoreEmail]" class="form-control" value="@(Model.ContainsKey("StoreEmail") ? Model["StoreEmail"] : "support@fashion.com")" style="border-radius: 8px;" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-muted text-uppercase">Số điện thoại</label>
+                        <input type="text" name="settings[StorePhone]" class="form-control" value="@(Model.ContainsKey("StorePhone") ? Model["StorePhone"] : "+84 909 123 456")" style="border-radius: 8px;" required />
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label fw-semibold small text-muted text-uppercase">Địa chỉ</label>
+                        <input type="text" name="settings[StoreAddress]" class="form-control" value="@(Model.ContainsKey("StoreAddress") ? Model["StoreAddress"] : "HUTECH KHU E1.0809")" style="border-radius: 8px;" required />
+                    </div>
+                </div>
             </div>
-            <div class="card-body p-4">
-                <div class="mb-3">
-                    <label class="form-label fw-semibold small text-muted text-uppercase">Tên cửa hàng</label>
-                    <input type="text" class="form-control" value="Fashion Store" style="border-radius: 8px;" />
+        </div>
+
+        <!-- System Info -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <h6 class="fw-bold mb-0"><i class="fas fa-server text-success me-2"></i>Thông tin hệ thống</h6>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label fw-semibold small text-muted text-uppercase">Email liên hệ</label>
-                    <input type="email" class="form-control" value="support@fashion.com" style="border-radius: 8px;" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label fw-semibold small text-muted text-uppercase">Số điện thoại</label>
-                    <input type="text" class="form-control" value="+84 909 123 456" style="border-radius: 8px;" />
-                </div>
-                <div class="mb-0">
-                    <label class="form-label fw-semibold small text-muted text-uppercase">Địa chỉ</label>
-                    <input type="text" class="form-control" value="HUTECH KHU E1.0809" style="border-radius: 8px;" />
+                <div class="card-body p-4">
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <span class="text-muted"><i class="fas fa-code me-2"></i>Framework</span>
+                            <span class="badge rounded-pill" style="background: rgba(54,153,255,0.1); color: #3699ff; font-weight: 600; padding: 6px 12px;">ASP.NET Core 8.0</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <span class="text-muted"><i class="fas fa-database me-2"></i>Database</span>
+                            <span class="badge rounded-pill" style="background: rgba(29,201,183,0.1); color: #1dc9b7; font-weight: 600; padding: 6px 12px;">SQL Server</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <span class="text-muted"><i class="fas fa-shield-alt me-2"></i>Authentication</span>
+                            <span class="badge rounded-pill" style="background: rgba(255,184,34,0.1); color: #ffb822; font-weight: 600; padding: 6px 12px;">ASP.NET Identity</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <span class="text-muted"><i class="fas fa-paint-brush me-2"></i>UI Framework</span>
+                            <span class="badge rounded-pill" style="background: rgba(111,66,193,0.1); color: #6f42c1; font-weight: 600; padding: 6px 12px;">Bootstrap 5</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center py-3">
+                            <span class="text-muted"><i class="fas fa-clock me-2"></i>Trạng thái</span>
+                            <span class="badge rounded-pill bg-success" style="padding: 6px 12px;"><i class="fas fa-check-circle me-1"></i>Hoạt động</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- System Info -->
-    <div class="col-lg-6">
-        <div class="card border-0 shadow-sm" style="border-radius: 12px;">
-            <div class="card-header bg-white border-0 pt-4 px-4">
-                <h6 class="fw-bold mb-0"><i class="fas fa-server text-success me-2"></i>Thông tin hệ thống</h6>
-            </div>
-            <div class="card-body p-4">
-                <ul class="list-unstyled mb-0">
-                    <li class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                        <span class="text-muted"><i class="fas fa-code me-2"></i>Framework</span>
-                        <span class="badge rounded-pill" style="background: rgba(54,153,255,0.1); color: #3699ff; font-weight: 600; padding: 6px 12px;">ASP.NET Core 8.0</span>
-                    </li>
-                    <li class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                        <span class="text-muted"><i class="fas fa-database me-2"></i>Database</span>
-                        <span class="badge rounded-pill" style="background: rgba(29,201,183,0.1); color: #1dc9b7; font-weight: 600; padding: 6px 12px;">SQL Server</span>
-                    </li>
-                    <li class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                        <span class="text-muted"><i class="fas fa-shield-alt me-2"></i>Authentication</span>
-                        <span class="badge rounded-pill" style="background: rgba(255,184,34,0.1); color: #ffb822; font-weight: 600; padding: 6px 12px;">ASP.NET Identity</span>
-                    </li>
-                    <li class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                        <span class="text-muted"><i class="fas fa-paint-brush me-2"></i>UI Framework</span>
-                        <span class="badge rounded-pill" style="background: rgba(111,66,193,0.1); color: #6f42c1; font-weight: 600; padding: 6px 12px;">Bootstrap 5</span>
-                    </li>
-                    <li class="d-flex justify-content-between align-items-center py-3">
-                        <span class="text-muted"><i class="fas fa-clock me-2"></i>Trạng thái</span>
-                        <span class="badge rounded-pill bg-success" style="padding: 6px 12px;"><i class="fas fa-check-circle me-1"></i>Hoạt động</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
+</form>
 
 <!-- Note -->
 <div class="card border-0 shadow-sm mt-4" style="border-radius: 12px; border-left: 4px solid #3699ff !important;">
@@ -78,7 +103,7 @@
         </div>
         <div>
             <div class="fw-semibold text-dark" style="font-size: 0.9rem;">Lưu ý</div>
-            <div class="text-muted" style="font-size: 0.82rem;">Các cài đặt trên là giao diện hiển thị. Để thay đổi cấu hình thực tế, hãy chỉnh sửa file <code>appsettings.json</code>.</div>
+            <div class="text-muted" style="font-size: 0.82rem;">Dữ liệu cấu hình đã được đồng bộ với Cơ sở dữ liệu. Thay đổi tại đây sẽ cập nhật toàn hệ thống.</div>
         </div>
     </div>
 </div>
