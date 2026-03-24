@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\www\\Websitebanhang\\WebsiteBanHang.csproj": {}
+    "C:\\wwww\\Websitebanhang\\WebsiteBanHang.csproj": {}
   },
   "projects": {
-    "C:\\www\\Websitebanhang\\WebsiteBanHang.csproj": {
+    "C:\\wwww\\Websitebanhang\\WebsiteBanHang.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\www\\Websitebanhang\\WebsiteBanHang.csproj",
+        "projectUniqueName": "C:\\wwww\\Websitebanhang\\WebsiteBanHang.csproj",
         "projectName": "WebsiteBanHang",
-        "projectPath": "C:\\www\\Websitebanhang\\WebsiteBanHang.csproj",
+        "projectPath": "C:\\wwww\\Websitebanhang\\WebsiteBanHang.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\www\\Websitebanhang\\obj\\",
+        "outputPath": "C:\\wwww\\Websitebanhang\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",

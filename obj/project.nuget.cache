@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CR5vFddhgzSCL8/trCCFMMbkpGY2Iu90SAPD9cnwOAkSI6O4ZD+/uqZrhNYykYvDfP+JJWDlS+g8UppAsqxzFg==",
+  "dgSpecHash": "a63hOZE2Ctv81FOODzC8yl9yEeWLZ9gFiJ7YMLzagT/MGOL+HFAxJigUx67FIX2JoHLswBX9wPZqpyyTI7+Npg==",
   "success": true,
-  "projectFilePath": "C:\\www\\Websitebanhang\\WebsiteBanHang.csproj",
+  "projectFilePath": "C:\\wwww\\Websitebanhang\\WebsiteBanHang.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
